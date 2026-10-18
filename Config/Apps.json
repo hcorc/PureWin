@@ -1,0 +1,1062 @@
+{
+    "Version":  "2.0",
+    "TotalApps":  132,
+    "Apps":  [
+                 {
+                     "AppId":  "Microsoft.Edge",
+                     "DisplayName":  "Microsoft Edge & WebView2",
+                     "Description":  "Windows yerleşik web tarayıcısı, arka plan servisleri ve entegrasyon bileşenleri.",
+                     "Category":  "Tarayıcı & Web",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Edge"
+                 },
+                 {
+                     "AppId":  "Clipchamp.Clipchamp",
+                     "DisplayName":  "Clipchamp Video Düzenleyici",
+                     "Description":  "Microsoft\u0027un Windows 11 ile entegre ettiği video düzenleme yazılımı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.3DBuilder",
+                     "DisplayName":  "3D Builder Modelleme",
+                     "Description":  "Eski 3B modelleme ve baskı hazırlama aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.549981C3F5F10",
+                     "DisplayName":  "Microsoft Cortana",
+                     "Description":  "Desteği sonlandırılmış eski sesli asistan kalıntıları.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingFinance",
+                     "DisplayName":  "Bing Finans \u0026 Borsa",
+                     "Description":  "Ekonomi haberleri ve hisse senedi takip aracı.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingFoodAndDrink",
+                     "DisplayName":  "Bing Food And Drink",
+                     "Description":  "Bing tabanlı web içeriği, haber ve arka plan servisi.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingHealthAndFitness",
+                     "DisplayName":  "Bing Health And Fitness",
+                     "Description":  "Bing tabanlı web içeriği, haber ve arka plan servisi.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingNews",
+                     "DisplayName":  "Microsoft Haberler (Bing News)",
+                     "Description":  "Arka planda haber çeken ve bildirim gönderen toplayıcı.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingSports",
+                     "DisplayName":  "Bing Spor",
+                     "Description":  "Spor skorları ve haber takibi servisi.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingTranslator",
+                     "DisplayName":  "Bing Çeviri",
+                     "Description":  "Yerel Bing metin çeviri hizmeti.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingTravel",
+                     "DisplayName":  "Bing Travel",
+                     "Description":  "Bing tabanlı web içeriği, haber ve arka plan servisi.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingWeather",
+                     "DisplayName":  "Bing Hava Durumu",
+                     "Description":  "Görev çubuğu ve widget hava durumu uygulaması.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "XP9CXNGPPJ97XX",
+                     "DisplayName":  "Microsoft Copilot Uygulaması",
+                     "Description":  "Windows 11 ile gelen bağımsız Copilot arayüzü.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "WinGet"
+                 },
+                 {
+                     "AppId":  "Microsoft.Windows.AIHub",
+                     "DisplayName":  "Copilot+ AI Hub",
+                     "Description":  "Windows 11 24H2 ile gelen yapay zeka merkezi.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Getstarted",
+                     "DisplayName":  "İpuçları ve Başlangıç",
+                     "Description":  "Windows 11 tanıtım rehberi ve ipucu bildirimleri.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Messaging",
+                     "DisplayName":  "Messaging",
+                     "Description":  "Messaging app, often integrates with Skype (Largely discontinued)",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Microsoft3DViewer",
+                     "DisplayName":  "3D Görüntüleyici (3D Viewer)",
+                     "Description":  "3B model dosyalarını önizleme uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MicrosoftJournal",
+                     "DisplayName":  "Microsoft Journal",
+                     "Description":  "Digital note-taking app optimized for pen input",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MicrosoftOfficeHub",
+                     "DisplayName":  "Microsoft 365 / Office Hub",
+                     "Description":  "Office satın alma ve abonelik yönlendirme aracı.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MicrosoftPowerBIForWindows",
+                     "DisplayName":  "Power BI",
+                     "Description":  "Business analytics service client",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MicrosoftSolitaireCollection",
+                     "DisplayName":  "Microsoft Solitaire Koleksiyonu",
+                     "Description":  "Reklam barındıran gömülü iskambil ve kart oyunları.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MicrosoftStickyNotes",
+                     "DisplayName":  "Yapışkan Notlar (Sticky Notes)",
+                     "Description":  "Masaüstü yapışkan notlar aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MixedReality.Portal",
+                     "DisplayName":  "Mixed Reality Portal",
+                     "Description":  "Portal for Windows Mixed Reality headsets",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.NetworkSpeedTest",
+                     "DisplayName":  "Network Speed Test",
+                     "Description":  "Internet connection speed test utility",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Office.OneNote",
+                     "DisplayName":  "OneNote",
+                     "Description":  "Microsoft 365, Office ve bulut üretkenlik yönlendirme uygulaması.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Office.Sway",
+                     "DisplayName":  "Sway",
+                     "Description":  "Microsoft 365, Office ve bulut üretkenlik yönlendirme uygulaması.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.OneConnect",
+                     "DisplayName":  "One Connect",
+                     "Description":  "Mobile Operator management app (Replaced by Mobile Plans)",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Print3D",
+                     "DisplayName":  "Print 3D",
+                     "Description":  "3D printing preparation software",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.PowerAutomateDesktop",
+                     "DisplayName":  "Power Automate Desktop",
+                     "Description":  "Kurumsal iş akışı otomasyon aracı.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.SkypeApp",
+                     "DisplayName":  "Skype",
+                     "Description":  "Eski sesli ve görüntülü sohbet uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Todos",
+                     "DisplayName":  "Microsoft To Do",
+                     "Description":  "Görev ve yapılacaklar listesi uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Windows.DevHome",
+                     "DisplayName":  "Windows Dev Home",
+                     "Description":  "Geliştirici paneli ve widget\u0027ları.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsAlarms",
+                     "DisplayName":  "Alarms \u0026 Clock",
+                     "Description":  "Alarms \u0026 Clock app",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsFeedbackHub",
+                     "DisplayName":  "Geri Bildirim Merkezi (Feedback Hub)",
+                     "Description":  "Sistem telemetrisi ve kullanıcı bildirim servisi.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsMaps",
+                     "DisplayName":  "Windows Haritalar",
+                     "Description":  "Yerel harita ve yol tarifi uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsSoundRecorder",
+                     "DisplayName":  "Windows Ses Kaydedici",
+                     "Description":  "Dahili temel ses kayıt aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.XboxApp",
+                     "DisplayName":  "Xbox Konsol Uygulaması",
+                     "Description":  "Xbox konsol eşleme ve arka plan servisleri.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.ZuneVideo",
+                     "DisplayName":  "Filmler ve TV",
+                     "Description":  "Varsayılan video ve film oynatma aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MicrosoftCorporationII.MicrosoftFamily",
+                     "DisplayName":  "Family Safety",
+                     "Description":  "Family Safety App for managing family accounts and settings",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MicrosoftCorporationII.QuickAssist",
+                     "DisplayName":  "Hızlı Yardım (Quick Assist)",
+                     "Description":  "Uzaktan masaüstü destek aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MicrosoftTeams",
+                     "DisplayName":  "Microsoft Teams (Eski)",
+                     "Description":  "Kişisel kullanım için eski Teams kalıntısı.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MSTeams",
+                     "DisplayName":  "Microsoft Teams (Yeni)",
+                     "Description":  "Windows 11 ile entegre gelen yeni Teams uygulaması.",
+                     "Category":  "Ofis \u0026 Üretkenlik",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "ACGMediaPlayer",
+                     "DisplayName":  "ACG Media Player",
+                     "Description":  "Media player app",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "ActiproSoftwareLLC",
+                     "DisplayName":  "Actipro Software",
+                     "Description":  "Potentially UI controls or software components, often bundled by OEMs",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AdobeSystemsIncorporated.AdobePhotoshopExpress",
+                     "DisplayName":  "Adobe Photoshop Express",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Amazon.com.Amazon",
+                     "DisplayName":  "Amazon",
+                     "Description":  "Amazon shopping app",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AmazonVideo.PrimeVideo",
+                     "DisplayName":  "Amazon Prime Video",
+                     "Description":  "Amazon film ve video akış uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Asphalt8Airborne",
+                     "DisplayName":  "Asphalt 8",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AutodeskSketchBook",
+                     "DisplayName":  "Autodesk SketchBook",
+                     "Description":  "Digital drawing and sketching app",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "CaesarsSlotsFreeCasino",
+                     "DisplayName":  "Caesars Slots",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "COOKINGFEVER",
+                     "DisplayName":  "Cooking Fever",
+                     "Description":  "Restaurant simulation game",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "CyberLinkMediaSuiteEssentials",
+                     "DisplayName":  "CyberLink Media Suite",
+                     "Description":  "Multimedia software suite (often preinstalled by OEMs)",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "DisneyMagicKingdoms",
+                     "DisplayName":  "Disney Magic Kingdoms",
+                     "Description":  "Disney theme park building game",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Disney.37853FC22B2CE",
+                     "DisplayName":  "Disney+",
+                     "Description":  "Önceden yüklenmiş Disney+ film ve dizi servisi.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "DrawboardPDF",
+                     "DisplayName":  "Drawboard PDF",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Duolingo-LearnLanguagesforFree",
+                     "DisplayName":  "Duolingo",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "FACEBOOK.FACEBOOK",
+                     "DisplayName":  "Facebook",
+                     "Description":  "Önceden yüklenen Facebook masaüstü uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "FarmVille2CountryEscape",
+                     "DisplayName":  "FarmVille 2",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Flipboard",
+                     "DisplayName":  "Flipboard",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "HiddenCity",
+                     "DisplayName":  "Hidden City",
+                     "Description":  "Hidden object puzzle adventure game",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "HULULLC.HULUPLUS",
+                     "DisplayName":  "Hulu",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "iHeartRadio",
+                     "DisplayName":  "iHeartRadio",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Facebook.Instagram",
+                     "DisplayName":  "Instagram",
+                     "Description":  "Önceden yüklenen Instagram sosyal medya uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "king.com.BubbleWitch3Saga",
+                     "DisplayName":  "Bubble Witch 3",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "king.com.CandyCrushSaga",
+                     "DisplayName":  "Candy Crush Saga",
+                     "Description":  "Windows ile otomatik kurulan sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "king.com.CandyCrushSodaSaga",
+                     "DisplayName":  "Candy Crush Soda Saga",
+                     "Description":  "Windows ile otomatik kurulan sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "LinkedInforWindows",
+                     "DisplayName":  "LinkedIn for Windows",
+                     "Description":  "İş ağı ve kariyer uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MarchofEmpires",
+                     "DisplayName":  "March of Empires",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "4DF9E0F8.Netflix",
+                     "DisplayName":  "Netflix",
+                     "Description":  "Windows ile önerilen Netflix akış uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "NYTCrossword",
+                     "DisplayName":  "NYT Crossword",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "OneCalendar",
+                     "DisplayName":  "One Calendar",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "PandoraMediaInc",
+                     "DisplayName":  "Pandora",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "PhototasticCollage",
+                     "DisplayName":  "Phototastic Collage",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "PicsArt-PhotoStudio",
+                     "DisplayName":  "PicsArt",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "PolarrPhotoEditorAcademicEdition",
+                     "DisplayName":  "Polarr Photo Editor",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "flaregamesGmbH.RoyalRevolt",
+                     "DisplayName":  "Royal Revolt",
+                     "Description":  "Windows ile otomatik indirilen reklamlı/sponsorlu oyun.",
+                     "Category":  "Ön Yüklü Oyunlar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Sidia.LiveWallpaper",
+                     "DisplayName":  "Live Wallpaper",
+                     "Description":  "Live wallpaper app",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "SlingTV",
+                     "DisplayName":  "Sling TV",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "SpotifyAB.SpotifyMusic",
+                     "DisplayName":  "Spotify Müzik",
+                     "Description":  "Windows tarafından varsayılan önerilen müzik uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "BytedancePte.Ltd.TikTok",
+                     "DisplayName":  "TikTok Uygulaması",
+                     "Description":  "Windows başlangıcında önerilen TikTok uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "TuneInRadio",
+                     "DisplayName":  "TuneIn Radio",
+                     "Description":  "Microsoft ve iş ortakları tarafından önceden yüklenen tüketici uygulaması.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "WinZipUniversal",
+                     "DisplayName":  "WinZip Evrensel",
+                     "Description":  "Sponsorlu sıkıştırma yazılımı.",
+                     "Category":  "Sponsorlu \u0026 3. Parti Uygulamalar",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.BingSearch",
+                     "DisplayName":  "Bing Search",
+                     "Description":  "Bing tabanlı web içeriği, haber ve arka plan servisi.",
+                     "Category":  "Bing Hizmetleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.GamingApp",
+                     "DisplayName":  "Xbox Oyun Uygulaması (Xbox App)",
+                     "Description":  "Xbox Game Pass ve oyun kütüphanesi yöneticisi.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.M365Companions",
+                     "DisplayName":  "Microsoft 365 Companions",
+                     "Description":  "Microsoft 365 (Business) Calendar, Files and People mini-apps, these apps may be reinstalled if enabled by your Microsoft 365 admin",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.MSPaint",
+                     "DisplayName":  "Paint 3D",
+                     "Description":  "Paint 3D (Modern paint application with 3D features)",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.OneDrive",
+                     "DisplayName":  "OneDrive",
+                     "Description":  "OneDrive consumer cloud storage client",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "WinGet"
+                 },
+                 {
+                     "AppId":  "Microsoft.OutlookForWindows",
+                     "DisplayName":  "Yeni Outlook (Web Tabanlı)",
+                     "Description":  "Windows 11 ile gelen reklamlı yeni web tabanlı e-posta.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Paint",
+                     "DisplayName":  "Windows Paint (Klasik/Yeni Çizim)",
+                     "Description":  "Windows dahili çizim ve boyama uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.People",
+                     "DisplayName":  "Microsoft Kişiler",
+                     "Description":  "Eski Windows rehber ve kişi eşleme servisi.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.RemoteDesktop",
+                     "DisplayName":  "Uzak Masaüstü İstemcisi",
+                     "Description":  "Uzak bilgisayarlara bağlanma aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.ScreenSketch",
+                     "DisplayName":  "Ekran Alıntısı Aracı (Snipping Tool)",
+                     "Description":  "Ekran görüntüsü yakalama ve kırpma aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.StartExperiencesApp",
+                     "DisplayName":  "Windows Widget Paneli Deneyimi",
+                     "Description":  "Görev çubuğu hava durumu ve haber akışı arayüzü.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Whiteboard",
+                     "DisplayName":  "Microsoft Whiteboard",
+                     "Description":  "Dijital beyaz tahta çizim aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Windows.Photos",
+                     "DisplayName":  "Windows Fotoğraflar",
+                     "Description":  "Varsayılan resim ve fotoğraf görüntüleyici.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsCalculator",
+                     "DisplayName":  "Windows Hesap Makinesi",
+                     "Description":  "Dahili hesap makinesi aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsCamera",
+                     "DisplayName":  "Windows Kamera",
+                     "Description":  "Web kamerası ve video çekim aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.windowscommunicationsapps",
+                     "DisplayName":  "Windows Posta ve Takvim",
+                     "Description":  "Eski yerel e-posta ve takvim servisi.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WindowsNotepad",
+                     "DisplayName":  "Windows Not Defteri",
+                     "Description":  "Metin ve kod düzenleyici not defteri.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.XboxGameOverlay",
+                     "DisplayName":  "Xbox Game Overlay",
+                     "Description":  "Xbox oyun entegrasyonu ve arka plan katmanı.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.XboxGamingOverlay",
+                     "DisplayName":  "Xbox Game Bar",
+                     "Description":  "Oyun içi panel, kayıt ve FPS sayacı katmanı.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.YourPhone",
+                     "DisplayName":  "Telefon Bağlantısı (Phone Link)",
+                     "Description":  "Android/iPhone ile bilgisayar eşleme aracı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.ZuneMusic",
+                     "DisplayName":  "Windows Medya Oynatıcı",
+                     "Description":  "Eski Groove / yeni dahili müzik oynatıcı.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MicrosoftWindows.CrossDevice",
+                     "DisplayName":  "Cross Device Experience",
+                     "Description":  "Phone integration within File Explorer, Camera and more (Part of Phone Link features)",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "MicrosoftWindows.Client.WebExperience",
+                     "DisplayName":  "Windows Web Deneyimi Paketi (Web Experience)",
+                     "Description":  "Widget motoru ve web tabanlı Windows bileşenleri.",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.WidgetsPlatformRuntime",
+                     "DisplayName":  "Widgets Platform Runtime",
+                     "Description":  "Runtime required for Windows Widgets to function",
+                     "Category":  "Microsoft Bileşeni",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "LGElectronics.LGMonitorApp",
+                     "DisplayName":  "LG Monitor App",
+                     "Description":  "LG monitör ve cihaz yönetim aracı.",
+                     "Category":  "LG Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPAIExperienceCenter",
+                     "DisplayName":  "HP AI Experience Center",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPConnectedMusic",
+                     "DisplayName":  "HP Connected Music",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPConnectedPhotopoweredbySnapfish",
+                     "DisplayName":  "HP Connected Photo",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPDesktopSupportUtilities",
+                     "DisplayName":  "HP Desktop Support Utilities",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPEasyClean",
+                     "DisplayName":  "HP Easy Clean",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPFileViewer",
+                     "DisplayName":  "HP File Viewer",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPJumpStarts",
+                     "DisplayName":  "HP JumpStarts",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPPCHardwareDiagnosticsWindows",
+                     "DisplayName":  "HP PC Hardware Diagnostics",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPPowerManager",
+                     "DisplayName":  "HP Power Manager",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPPrinterControl",
+                     "DisplayName":  "HP Printer Control",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPPrivacySettings",
+                     "DisplayName":  "HP Privacy Settings",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPQuickDrop",
+                     "DisplayName":  "HP QuickDrop",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPQuickTouch",
+                     "DisplayName":  "HP QuickTouch",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPRegistration",
+                     "DisplayName":  "HP Registration",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPSupportAssistant",
+                     "DisplayName":  "HP Support Assistant",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPSureShieldAI",
+                     "DisplayName":  "HP Sure Shield AI",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPSystemInformation",
+                     "DisplayName":  "HP System Information",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPWelcome",
+                     "DisplayName":  "HP Welcome",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.HPWorkWell",
+                     "DisplayName":  "HP WorkWell",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "AD2F1837.myHP",
+                     "DisplayName":  "HP myHP",
+                     "Description":  "HP bilgisayarlarla gelen üretici arka plan yazılımı.",
+                     "Category":  "HP Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "E046963F.LenovoCompanion",
+                     "DisplayName":  "Lenovo Vantage",
+                     "Description":  "Lenovo bilgisayarlarla gelen arka plan telemetri ve yönetim aracı.",
+                     "Category":  "Lenovo Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "LenovoCompanyLimited.LenovoVantageService",
+                     "DisplayName":  "Lenovo Vantage Service",
+                     "Description":  "Lenovo bilgisayarlarla gelen arka plan telemetri ve yönetim aracı.",
+                     "Category":  "Lenovo Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "DellInc.DellSupportAssistforPCs",
+                     "DisplayName":  "Dell SupportAssist",
+                     "Description":  "Dell bilgisayarlarla gelen destek ve arka plan servisleri.",
+                     "Category":  "Dell Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "DellInc.DellDigitalDelivery",
+                     "DisplayName":  "Dell Digital Delivery Services",
+                     "Description":  "Dell bilgisayarlarla gelen destek ve arka plan servisleri.",
+                     "Category":  "Dell Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "DellInc.DellMobileConnect",
+                     "DisplayName":  "Dell Mobile Connect",
+                     "Description":  "Dell bilgisayarlarla gelen destek ve arka plan servisleri.",
+                     "Category":  "Dell Ön Yüklü Bloatware",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 }
+             ]
+}

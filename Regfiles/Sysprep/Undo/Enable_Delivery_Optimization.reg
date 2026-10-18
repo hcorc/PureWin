@@ -1,0 +1,5 @@
+Windows Registry Editor Version 5.00
+
+; Enable sharing downloaded updates with other PCs (Delivery Optimization)
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization]
+"SystemSettingsDownloadMode"=dword:00000001

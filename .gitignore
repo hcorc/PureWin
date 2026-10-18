@@ -1,0 +1,22 @@
+# Derleme çıktıları (komutla yeniden üretilir)
+bin/
+obj/
+publish/
+
+# Yayın paketleri (GitHub Releases'a yüklenir, depoya girmez)
+Release/
+*.zip
+
+# Visual Studio / kullanıcı dosyaları
+.vs/
+*.user
+*.suo
+
+# Çalışma zamanı dosyaları
+crash.log
+*.log
+*.tmp
+
+# Derlenmiş dosyalar
+*.exe
+*.pdb
