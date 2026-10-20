@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/s%C3%BCr%C3%BCm-v1.0-brightgreen" alt="Sürüm">
+  <img src="https://img.shields.io/badge/s%C3%BCr%C3%BCm-v1.1.0-brightgreen" alt="Sürüm">
   <img src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6" alt="Platform">
   <img src="https://img.shields.io/badge/.NET-8.0-512BD4" alt=".NET">
   <img src="https://img.shields.io/badge/lisans-MIT-green" alt="Lisans">

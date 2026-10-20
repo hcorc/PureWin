@@ -1,0 +1,378 @@
+<ui:FluentWindow x:Class="PureWin.NetworkDnsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="Ağ &amp; DNS Merkezi" 
+        Height="700" Width="1000"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterOwner"
+        WindowBackdropType="Mica"
+        ExtendsContentIntoTitleBar="True">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Modern Fluent TitleBar -->
+        <ui:TitleBar Grid.Row="0" Title="Ağ &amp; DNS Merkezi" Padding="0,4,0,4">
+            <ui:TitleBar.Header>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <TextBlock Text="🌐" FontSize="15" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <TextBlock Text="Ağ &amp; DNS Merkezi" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+
+        <!-- Ana İçerik -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Üst Başlık & Araç Butonları Bloğu -->
+            <Border Grid.Row="0" Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}" 
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="24,18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Başlık & Açıklama -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <TextBlock Text="🌐" FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Ağ &amp; DNS Merkezi" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="Ağ bilgilerini görüntüleyin; DNS ayarlarını yedekli ve doğrulamalı şekilde yönetin." FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+
+                    <!-- Araç Butonları -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:Button x:Name="BtnRefresh" Click="BtnRefresh_Click"
+                                   Appearance="Secondary" Padding="14,8" CornerRadius="6" Margin="0,0,8,0"
+                                   ToolTip="Ağ bağdaştırıcılarını ve adres bilgilerini yeniden sorgular">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔄" FontSize="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Yenile" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnFlushDns" Click="BtnFlushDns_Click"
+                                   Appearance="Secondary" Padding="14,8" CornerRadius="6" Margin="0,0,8,0"
+                                   ToolTip="DNS istemci önbelleğini temizler (Clear-DnsClientCache)">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="FlushDnsIcon" Text="🧹" FontSize="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock x:Name="FlushDnsText" Text="DNS Önbelleğini Temizle" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnPingTest" Click="BtnPingTest_Click"
+                                   Appearance="Secondary" Padding="14,8" CornerRadius="6"
+                                   ToolTip="Ağ geçitleri ve DNS sunucularına yanıt süresi testi yapar">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="PingTestIcon" Text="📡" FontSize="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock x:Name="PingTestText" Text="Gecikme Testi" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </ui:Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ScrollViewer İçeriği -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="24,18,24,24">
+
+                    <!-- İlerleme Çubuğu -->
+                    <ProgressBar x:Name="LoadingBar" IsIndeterminate="True" Height="3" Margin="0,0,0,16" Visibility="Collapsed" />
+
+                    <!-- Boş Durum Bildirimi -->
+                    <Border x:Name="EmptyStateBorder" Visibility="Collapsed"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                            CornerRadius="8" Padding="24" Margin="0,0,0,16" HorizontalAlignment="Stretch">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="ℹ️" FontSize="28" HorizontalAlignment="Center" Margin="0,0,0,8" />
+                            <TextBlock x:Name="EmptyStateText" Text="Ağ bağdaştırıcısı bulunamadı." FontSize="14" FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- BÖLÜM 1: AĞ BAĞDAŞTIRICILARI -->
+                    <TextBlock Text="AĞ BAĞDAŞTIRICILARI" FontSize="11" FontWeight="Bold" 
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,0,12" />
+
+                    <!-- Adaptör Kartları Listesi -->
+                    <ItemsControl x:Name="AdaptersList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <!-- Üst Satır: İkon + Ad + Açıklama  |  Durum Rozeti -->
+                                        <Grid Margin="0,0,0,12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Sol: İkon + Ad + Açıklama -->
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding TypeIcon}" FontSize="20" Margin="0,0,12,0" VerticalAlignment="Center" />
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" 
+                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                                    <TextBlock Text="{Binding Description}" FontSize="11" 
+                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                                               TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Sağ: Durum Rozeti -->
+                                            <Border Grid.Column="1" 
+                                                    Background="{Binding StatusBadgeBackground}"
+                                                    BorderBrush="{Binding StatusBadgeBorder}"
+                                                    BorderThickness="1" CornerRadius="6" Padding="10,3" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding StatusDisplayText}" FontWeight="SemiBold" FontSize="11" 
+                                                           Foreground="{Binding StatusBadgeForeground}" />
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Ayırıcı Çizgi -->
+                                        <Border Height="1" Background="{DynamicResource CardStrokeColorDefaultBrush}" Margin="0,0,0,12" />
+
+                                        <!-- Alan Satırları: 2 Sütunlu Izgara -->
+                                        <Grid Margin="0,0,0,8">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="1.1*" />
+                                                <ColumnDefinition Width="1.3*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Sol Sütun: Hız, MAC, Ağ Geçidi -->
+                                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                                <TextBlock Margin="0,0,0,6">
+                                                    <Run Text="Bağlantı Hızı: " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding LinkSpeed, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,0,0,6">
+                                                    <Run Text="MAC Adresi: " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding MacAddress, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,0,0,6">
+                                                    <Run Text="Ağ Geçidi: " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding GatewayDisplayText, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <!-- Sağ Sütun: IPv4, IPv6, DNS IPv4, DNS IPv6 -->
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Margin="0,0,0,6" TextWrapping="Wrap">
+                                                    <Run Text="IPv4: " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding Ipv4DisplayText, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,0,0,6" TextWrapping="Wrap">
+                                                    <Run Text="IPv6: " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding Ipv6DisplayText, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,0,0,6" TextWrapping="Wrap">
+                                                    <Run Text="DNS (IPv4): " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding DnsV4DisplayText, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                                <TextBlock Margin="0,0,0,6" TextWrapping="Wrap">
+                                                    <Run Text="DNS (IPv6): " FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Run Text="{Binding DnsV6DisplayText, Mode=OneWay}" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <!-- Alt Bilgi & Aksiyon Butonları -->
+                                        <Grid Margin="0,8,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Sol: InterfaceIndex -->
+                                            <TextBlock Grid.Column="0" Text="{Binding IfIndex, StringFormat='InterfaceIndex: {0}'}" 
+                                                       FontSize="10" Foreground="{DynamicResource TextFillColorTertiaryBrush}" 
+                                                       VerticalAlignment="Center" />
+
+                                            <!-- Sağ: Butonlar -->
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <ui:Button x:Name="DnsRestoreBtn" Content="Geri Al" Click="DnsRestoreBtn_Click"
+                                                           Tag="{Binding}" Visibility="{Binding RestoreButtonVisibility}"
+                                                           AutomationProperties.Name="Geri Al"
+                                                           ToolTip="Son değişiklikten önceki DNS ayarına döner"
+                                                           Appearance="Secondary" Padding="10,4" FontSize="11" CornerRadius="4" Margin="0,0,6,0" />
+
+                                                <ui:Button x:Name="DnsEditBtn" Content="DNS Ayarla" Click="DnsEditBtn_Click"
+                                                           Tag="{Binding}"
+                                                           AutomationProperties.Name="DNS Ayarla"
+                                                           Appearance="Secondary" Padding="10,4" FontSize="11" CornerRadius="4" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- BÖLÜM 2: GECİKME TESTİ SONUÇLARI -->
+                    <Border x:Name="LatencySection" Visibility="Collapsed" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Text="GECİKME TESTİ SONUÇLARI" FontSize="11" FontWeight="Bold" 
+                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,0,10" />
+
+                            <ItemsControl x:Name="LatencyResultsList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                                BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="120" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Hedef Adı / Adres -->
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="🌐" FontSize="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                                    <TextBlock Text="{Binding TargetLabel}" FontWeight="SemiBold" FontSize="13" 
+                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" />
+                                                </StackPanel>
+
+                                                <!-- Paket Kaybı -->
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,16,0">
+                                                    <TextBlock Text="Kayıp: " FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                                                    <TextBlock Text="{Binding DisplayLoss}" FontWeight="SemiBold" FontSize="11" 
+                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" />
+                                                </StackPanel>
+
+                                                <!-- Ortalama Gecikme Rozeti -->
+                                                <Border Grid.Column="2" 
+                                                        Background="{Binding QualityBadgeBackground}"
+                                                        BorderBrush="{Binding QualityBadgeBorder}"
+                                                        BorderThickness="1" CornerRadius="6" Padding="10,3" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding DisplayMs}" FontWeight="Bold" FontSize="12" 
+                                                               Foreground="{Binding QualityBadgeForeground}" HorizontalAlignment="Center" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Durum Satırı (Status Bar) -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}" 
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="20,8">
+            <TextBlock x:Name="StatusText" Text="Hazır" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Border>
+
+        <!-- DNS Düzenleme Katmanı (Overlay) - opak zemin: arkadaki içerik görünmez -->
+        <Border x:Name="DnsEditOverlay" Grid.Row="1" Grid.RowSpan="2"
+                Background="{DynamicResource SolidBackgroundFillColorBaseBrush}" Visibility="Collapsed">
+            <Border Width="460" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="8" Padding="24">
+                <StackPanel>
+                    <!-- Başlık & Adaptör Adı -->
+                    <StackPanel Margin="0,0,0,12">
+                        <TextBlock Text="DNS Ayarları" FontSize="16" FontWeight="Bold" 
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <TextBlock x:Name="DnsEditAdapterName" Text="Adaptör Adı" FontSize="12" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                   Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+
+                    <!-- Not Metni -->
+                    <Border Background="{DynamicResource SubtleFillColorSecondaryBrush}" 
+                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1" CornerRadius="6" Padding="12,10" Margin="0,0,0,16">
+                        <TextBlock Text="Değişiklik öncesi mevcut DNS ayarınız otomatik yedeklenir. Doğrulama başarısız olursa otomatik geri alınır. İşlem sırasında bağlantı birkaç saniye kesilebilir." 
+                                   FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </Border>
+
+                    <!-- Mod Seçimi -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <RadioButton x:Name="DnsDhcpRadio" Content="Otomatik (DHCP)" GroupName="DnsMode"
+                                     AutomationProperties.Name="Otomatik (DHCP)"
+                                     Checked="DnsModeRadio_Changed" Margin="0,0,20,0" IsChecked="True" />
+                        <RadioButton x:Name="DnsCustomRadio" Content="Özel adresler / hazır sağlayıcı" GroupName="DnsMode"
+                                     AutomationProperties.Name="Özel adresler / hazır sağlayıcı"
+                                     Checked="DnsModeRadio_Changed" />
+                    </StackPanel>
+
+                    <!-- Preset Butonları -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                        <TextBlock Text="Hazır Sağlayıcı:" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <ui:Button x:Name="DnsPresetCloudflare" Content="Cloudflare" Click="DnsPresetCloudflare_Click"
+                                   AutomationProperties.Name="Cloudflare DNS Önayarı"
+                                   Appearance="Secondary" Padding="10,4" FontSize="11" CornerRadius="4" Margin="0,0,6,0"
+                                   ToolTip="1.1.1.1 / 1.0.0.1" />
+                        <ui:Button x:Name="DnsPresetGoogle" Content="Google" Click="DnsPresetGoogle_Click"
+                                   AutomationProperties.Name="Google DNS Önayarı"
+                                   Appearance="Secondary" Padding="10,4" FontSize="11" CornerRadius="4" Margin="0,0,6,0"
+                                   ToolTip="8.8.8.8 / 8.8.4.4" />
+                        <ui:Button x:Name="DnsPresetQuad9" Content="Quad9" Click="DnsPresetQuad9_Click"
+                                   AutomationProperties.Name="Quad9 DNS Önayarı"
+                                   Appearance="Secondary" Padding="10,4" FontSize="11" CornerRadius="4"
+                                   ToolTip="9.9.9.9 / 149.112.112.112" />
+                    </StackPanel>
+
+                    <!-- DNS Kutu Alanları -->
+                    <StackPanel Margin="0,0,0,12">
+                        <TextBlock Text="Birincil DNS (IPv4)" FontSize="11" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+                        <ui:TextBox x:Name="DnsPrimaryBox" PlaceholderText="Örn: 1.1.1.1" 
+                                    AutomationProperties.Name="Birincil DNS"
+                                    Margin="0,0,0,10" />
+
+                        <TextBlock Text="İkincil DNS (IPv4) — isteğe bağlı" FontSize="11" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+                        <ui:TextBox x:Name="DnsSecondaryBox" PlaceholderText="Örn: 1.0.0.1" 
+                                    AutomationProperties.Name="İkincil DNS"
+                                    Margin="0,0,0,0" />
+                    </StackPanel>
+
+                    <!-- Hata / Uyarı Metni -->
+                    <TextBlock x:Name="DnsEditErrorText" Text="" Foreground="#EF4444" FontSize="11" 
+                               TextWrapping="Wrap" Margin="0,0,0,14" Visibility="Collapsed" />
+
+                    <!-- Aksiyon Butonları -->
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:Button x:Name="DnsCancelBtn" Grid.Column="1" Content="Vazgeç" Click="DnsCancelBtn_Click"
+                                   AutomationProperties.Name="Vazgeç"
+                                   Appearance="Secondary" Padding="16,8" CornerRadius="6" Margin="0,0,8,0" />
+                        <ui:Button x:Name="DnsApplyBtn" Grid.Column="2" Content="Uygula ve Doğrula" Click="DnsApplyBtn_Click"
+                                   AutomationProperties.Name="Uygula ve Doğrula"
+                                   Appearance="Primary" Padding="16,8" CornerRadius="6" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

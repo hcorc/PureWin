@@ -307,9 +307,9 @@ namespace PureWin.Services
                 },
                 new()
                 {
-                    Id = "DisableAnimations",
+                    Id = "BestPerformanceVisualFX",
                     Title = "Görsel Efektleri En İyi Performansa Ayarla",
-                    Description = "Pencere animasyonlarını, saydamlık ve menü gölgelerini kapatır. (Ekran yazı tipi kenarlarını yumuşatma korunur, yazılar bozulmaz).",
+                    Description = "Windows'un 'En iyi performans için ayarla' görsel efekt presetini uygular; ekran yazı tipi kenarlarını (ClearType) korur. Kapatınca önceki görsel efekt ayarlarına döner.",
                     Category = "Önerilen Oyun Ayarları",
                     Icon = "✨",
                     BadgeText = "Anında Tepki",
@@ -534,10 +534,8 @@ namespace PureWin.Services
                             isApplied = (bgVal is int bgi && bgi == 1);
                             break;
 
-                        case "DisableAnimations":
-                            var animVal = Registry.GetValue(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1");
-                            var transVal = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1);
-                            isApplied = (animVal?.ToString() == "0" && transVal is int ti && ti == 0);
+                        case "BestPerformanceVisualFX":
+                            isApplied = VisualEffectsPresetService.IsApplied();
                             break;
 
                         case "GameMode":
@@ -642,13 +640,15 @@ namespace PureWin.Services
         #endregion
 
         #region Değişiklikleri Uygulama / Geri Alma (Atomic Apply & Undo Engine)
-        public static async Task ApplySingleTweakAsync(GameTweakItem item, bool enable)
+        public static async Task<bool> ApplySingleTweakAsync(GameTweakItem item, bool enable)
         {
             if (!item.IsSupported)
             {
                 // Donanım veya Windows sürümü desteklemiyorsa hiçbir işlem yapma
-                return;
+                return false;
             }
+
+            bool visualEffectsSuccess = true;
 
             await Task.Run(async () =>
             {
@@ -669,21 +669,17 @@ namespace PureWin.Services
                         }
                         break;
 
-                    case "DisableAnimations":
-                        if (enable)
+                    case "BestPerformanceVisualFX":
+                        try
                         {
-                            TweakSnapshotService.CreateSnapshot("GameOpt_DisableAnimations", "Disable_Animations.reg", "Enable_Animations.reg");
-                            TweakSnapshotService.CreateSnapshot("GameOpt_DisableTransparency", "Disable_Transparency.reg", "Enable_Transparency.reg");
-                            RegistryService.ImportRegFile("Disable_Animations.reg");
-                            RegistryService.ImportRegFile("Disable_Transparency.reg");
+                            visualEffectsSuccess = enable
+                                ? VisualEffectsPresetService.Apply()
+                                : VisualEffectsPresetService.Restore();
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            bool restoredAnim = TweakSnapshotService.RestoreSnapshot("GameOpt_DisableAnimations");
-                            if (!restoredAnim) RegistryService.ImportRegFile("Enable_Animations.reg", isUndo: true);
-
-                            bool restoredTrans = TweakSnapshotService.RestoreSnapshot("GameOpt_DisableTransparency");
-                            if (!restoredTrans) RegistryService.ImportRegFile("Enable_Transparency.reg", isUndo: true);
+                            visualEffectsSuccess = false;
+                            System.Diagnostics.Debug.WriteLine($"[GameOptimizerService] Error applying BestPerformanceVisualFX: {ex.Message}");
                         }
                         break;
 
@@ -798,6 +794,8 @@ namespace PureWin.Services
 
                 SaveSnapshot(snapshot);
             });
+
+            return visualEffectsSuccess;
         }
 
         private static void ApplyUltimatePowerPlan(bool enable, GamingSnapshot snapshot)

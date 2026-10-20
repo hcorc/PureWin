@@ -214,6 +214,42 @@ namespace PureWin.Services
             }
         }
 
+        /// <summary>
+        /// Bu tweak için geri alınmamış bir ön-snapshot var mı?
+        /// Varsa: ayar bir zamanlar uygulanmış ve geri alınmamış demektir.
+        /// </summary>
+        public static bool HasSnapshot(string tweakId)
+        {
+            try
+            {
+                return File.Exists(GetSnapshotFilePath(tweakId));
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Kullanılmayan/eskimiş ön-snapshot dosyasını siler. Snapshot kullanmayan (ör. DisableAnimations)
+        /// toggle'ların eski sürümlerden kalan dosyalarının diskte birikmesini engeller.
+        /// </summary>
+        public static void DiscardSnapshot(string tweakId)
+        {
+            try
+            {
+                string snapshotPath = GetSnapshotFilePath(tweakId);
+                if (File.Exists(snapshotPath))
+                {
+                    File.Delete(snapshotPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[TweakSnapshotService] DiscardSnapshot failed for {tweakId}: {ex.Message}");
+            }
+        }
+
         private static void CollectTargetsFromRegFile(string fileName, bool isUndo, HashSet<(string Root, string SubKey, string ValueName)> targets)
         {
             try

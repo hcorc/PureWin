@@ -23,11 +23,21 @@ namespace PureWin.Services
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref uint pvParam, uint fWinIni);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, ref ANIMATIONINFO pvParam, uint fWinIni);
+
         [StructLayout(LayoutKind.Sequential)]
         private struct STICKYKEYS
         {
             public uint cbSize;
             public uint dwFlags;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct ANIMATIONINFO
+        {
+            public uint cbSize;
+            public int iMinAnimate;
         }
 
         private const uint SPI_GETMOUSE = 0x0003;
@@ -36,6 +46,8 @@ namespace PureWin.Services
         private const uint SPI_SETSTICKYKEYS = 0x003B;
         private const uint SPI_GETCLIENTAREAANIMATION = 0x1042;
         private const uint SPI_SETCLIENTAREAANIMATION = 0x1043;
+        private const uint SPI_GETANIMATION = 0x0048;
+        private const uint SPI_SETANIMATION = 0x0049;
         private const uint SPI_GETMENUSHOWDELAY = 0x006A;
         private const uint SPI_SETMENUSHOWDELAY = 0x006B;
 
@@ -205,6 +217,51 @@ namespace PureWin.Services
             try
             {
                 SystemParametersInfo(SPI_SETCLIENTAREAANIMATION, 0, (IntPtr)(disable ? 0 : 1), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// "Pencereler küçültülüp büyütülürken animasyon oynat" (MinAnimate) ayarının kapalı olup olmadığını
+        /// canlı User32 SPI sorgusuyla döndürür; SPI okunamazsa kayıt defterine düşer.
+        /// </summary>
+        public static bool IsWindowAnimationDisabled()
+        {
+            try
+            {
+                var ai = new ANIMATIONINFO { cbSize = (uint)Marshal.SizeOf<ANIMATIONINFO>() };
+                if (SystemParametersInfo(SPI_GETANIMATION, ai.cbSize, ref ai, 0))
+                {
+                    return ai.iMinAnimate == 0;
+                }
+            }
+            catch { }
+
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\WindowMetrics", false);
+                return (key?.GetValue("MinAnimate")?.ToString() ?? "1") == "0";
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// "Pencereler küçültülüp büyütülürken animasyon oynat" ayarını (MinAnimate) anında kapatır/açar.
+        /// Böylece ekran yenilemeye gerek kalmadan klasör penceresi açma/kapama animasyonu geri gelir.
+        /// </summary>
+        public static void SetWindowAnimationState(bool disable)
+        {
+            try
+            {
+                var ai = new ANIMATIONINFO
+                {
+                    cbSize = (uint)Marshal.SizeOf<ANIMATIONINFO>(),
+                    iMinAnimate = disable ? 0 : 1
+                };
+                SystemParametersInfo(SPI_SETANIMATION, ai.cbSize, ref ai, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
             }
             catch { }
         }

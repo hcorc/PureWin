@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:local="clr-namespace:PureWin"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         mc:Ignorable="d"
         Title="PureWin" 
-        Height="800" Width="1200"
+        Height="860" Width="1320"
         MinHeight="650" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         WindowBackdropType="Mica"
@@ -23,15 +24,27 @@
         </Grid.RowDefinitions>
 
         <!-- Modern Fluent TitleBar -->
-        <ui:TitleBar Grid.Row="0" Title="PureWin" Icon="{ui:ImageIcon 'pack://application:,,,/Assets/PureWin_icon_64.png'}">
+        <ui:TitleBar Grid.Row="0" Title="PureWin" Padding="0,4,0,4">
             <ui:TitleBar.Header>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
-                    <TextBlock Text="PureWin" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-                    <Border x:Name="AdminBadgeBorder" Background="#1A10B981" BorderBrush="#3310B981" BorderThickness="1" CornerRadius="8" Padding="6,1" Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                    <Image Source="pack://application:,,,/Assets/PureWin_icon_64.png" Width="24" Height="24" Margin="0,0,16,0"
+                           VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Text="PureWin" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <Border x:Name="AdminBadgeBorder" Background="#1A10B981" BorderBrush="#3310B981" BorderThickness="1" CornerRadius="8" Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center">
                         <TextBlock x:Name="AdminBadgeText" Text="● Yönetici Modu" FontSize="10" FontWeight="SemiBold" Foreground="#10B981" />
                     </Border>
                 </StackPanel>
             </ui:TitleBar.Header>
+            <ui:TitleBar.TrailingContent>
+                <ui:Button x:Name="AboutInfoBtn" Click="AboutInfo_Click" ToolTip="Hakkında"
+                           AutomationProperties.Name="Hakkında"
+                           Appearance="Transparent" Padding="0" Margin="0,4,6,0"
+                           Width="22" Height="22" MinWidth="0" MinHeight="0" CornerRadius="11"
+                           VerticalAlignment="Top"
+                           shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <ui:SymbolIcon Symbol="Info24" FontSize="13" />
+                </ui:Button>
+            </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
         <!-- Ana Çalışma Alanı -->
@@ -47,6 +60,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
@@ -153,7 +167,7 @@
                             <!-- 9. Sırada: Oyun ve Performans -->
                             <ui:Button x:Name="NavGamePerfBtn" Click="NavGamePerf_Click" 
                                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                       Padding="12,10" CornerRadius="8" Appearance="Secondary">
+                                       Padding="12,10" CornerRadius="8" Appearance="Secondary" Margin="0,0,0,6">
                                 <Grid HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -167,6 +181,31 @@
                                         <TextBlock x:Name="NavGameBadgeText" Text="0" FontSize="10" FontWeight="Bold" Foreground="#FFFFFF" />
                                     </Border>
                                 </Grid>
+                            </ui:Button>
+
+                            <!-- 10. Sırada: Tweak Kontrol -->
+                            <ui:Button x:Name="NavTweakAuditBtn" Click="NavTweakAudit_Click"
+                                       HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                       Padding="12,10" CornerRadius="8" Appearance="Secondary" Margin="0,0,0,6">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🧩" FontSize="15" Margin="0,0,10,0" />
+                                    <TextBlock Text="Tweak Kontrol" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </ui:Button>
+
+                            <!-- 3. Grup: Ağ & Araçlar -->
+                            <TextBlock Text="Ağ &amp; Araçlar" FontSize="11" FontWeight="Bold" 
+                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="8,16,0,10" />
+
+                            <!-- Başlatıcı: Ağ & DNS Merkezi (nav değil, ayrı pencere açar) -->
+                            <ui:Button x:Name="NavNetworkDnsBtn" Click="NavNetworkDns_Click"
+                                       HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                       Padding="12,10" CornerRadius="8" Appearance="Secondary" Margin="0,0,0,6"
+                                       ToolTip="Ağ &amp; DNS Merkezi'ni ayrı pencerede açar">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🌐" FontSize="15" Margin="0,0,10,0" />
+                                    <TextBlock Text="Ağ &amp; DNS Merkezi" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center" />
+                                </StackPanel>
                             </ui:Button>
                         </StackPanel>
                     </ScrollViewer>
@@ -200,6 +239,11 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
+
+                    <!-- Telif -->
+                    <TextBlock Grid.Row="2" Text="© 2026 hcorc (PureWin Project)" FontSize="10"
+                               HorizontalAlignment="Center" Margin="0,4,0,0"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                 </Grid>
             </Border>
 
@@ -876,8 +920,12 @@
                                            Appearance="Secondary" Padding="12,7" Margin="0,0,8,6" FontWeight="SemiBold" />
                                 <ui:Button x:Name="SelectAllCleanupBtn" Content="☑️ Tümünü Seç" Click="SelectAllCleanup_Click" 
                                            Appearance="Secondary" Padding="12,7" Margin="0,0,8,6" />
-                                <ui:Button x:Name="DeselectAllCleanupBtn" Content="⬜ Seçimi Kaldır" Click="DeselectAllCleanup_Click" 
-                                           Appearance="Secondary" Padding="12,7" Margin="0,0,0,6" />
+                                <ui:Button x:Name="DeselectAllCleanupBtn" Content="Seçimi Kaldır" Click="DeselectAllCleanup_Click" 
+                                           Appearance="Secondary" Padding="12,7" Margin="0,0,0,6">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="DismissSquare24" FontSize="14" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
                             </WrapPanel>
                         </Grid>
 
@@ -1317,17 +1365,13 @@
                                                 </Grid>
                                             </Border>
 
-                                            <!-- Orta: Uygulama Başlığı, Kaynak Rozeti, Dosya Konumu Butonu ve Yayıncı -->
+                                            <!-- Orta: Uygulama Başlığı (kaynak bilgisi tooltip'te), Dosya Konumu Butonu ve Yayıncı -->
                                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
                                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                                     <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" 
                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}" 
-                                                               TextTrimming="CharacterEllipsis" MaxWidth="420" VerticalAlignment="Center" />
-                                                    <Border Background="#14FFFFFF" BorderBrush="#24FFFFFF" BorderThickness="1" 
-                                                            CornerRadius="4" Padding="6,1" Margin="8,0,0,0" VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding SourceDisplay}" FontSize="10.5" 
-                                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                                    </Border>
+                                                               TextTrimming="CharacterEllipsis" MaxWidth="420" VerticalAlignment="Center"
+                                                               ToolTip="{Binding SourceDisplay}" />
                                                     <!-- Mini Dosya Konumunu Aç Butonu (WinUI 3 Nötr Akrilik Gümüş / Beyaz Stili) -->
                                                     <ui:Button Click="OpenAppLocation_Click" Tag="{Binding}" 
                                                                Padding="8,2" CornerRadius="5" Margin="8,0,0,0" 
@@ -1876,6 +1920,85 @@
                     </ScrollViewer>
                 </Grid>
 
+                <!-- 10. GÖRÜNÜM: TWEAK KONTROL (Güncelleme Sonrası Denetim, Salt Okunur) -->
+                <Grid x:Name="ViewTweakAudit" Visibility="Collapsed" Margin="24,16,24,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🧩" FontSize="18" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Tweak Kontrol" FontSize="20" FontWeight="Bold"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="Windows güncellemelerinden sonra ince ayarlarınızın hâlâ aktif olup olmadığını denetleyin. Bu sayfa salt okunurdur; hiçbir ayarı değiştirmez."
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Margin="0,4,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,12,0">
+                            <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="18" Margin="0,0,0,12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="SİSTEM AYARLARI DURUMU" FontSize="11" FontWeight="Bold"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                            <TextBlock x:Name="AuditActiveText" Text="0 Aktif" FontSize="20" FontWeight="Bold" Foreground="#10B981" />
+                                            <TextBlock x:Name="AuditSuspectText" Text="0 Sıfırlanmış Olabilir" FontSize="13" FontWeight="SemiBold"
+                                                       Foreground="#F59E0B" Margin="16,0,0,0" VerticalAlignment="Bottom" />
+                                            <TextBlock x:Name="AuditOtherText" Text="0 Diğer" FontSize="13" FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="16,0,0,0" VerticalAlignment="Bottom" />
+                                        </StackPanel>
+                                        <TextBlock x:Name="AuditLastScanText" Text="Son doğrulama: uygulama açılışı"
+                                                   FontSize="11" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,6,0,0" />
+                                    </StackPanel>
+                                    <ui:Button x:Name="AuditScanBtn" Grid.Column="1" Content="🔍 Denetle" Click="AuditScan_Click"
+                                               Appearance="Primary" Padding="14,7" VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+
+                            <ItemsControl x:Name="TweakAuditList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                                                CornerRadius="8" Padding="14,12" Margin="0,0,0,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="13.5"
+                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" TextWrapping="Wrap" />
+                                                    <TextBlock Text="{Binding Category}" FontSize="11"
+                                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,3,0,0" />
+                                                    <TextBlock Text="{Binding Detail}" FontSize="11"
+                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                                <Border Grid.Column="1" Background="{Binding StatusBackground}" BorderBrush="{Binding StatusBorder}"
+                                                        BorderThickness="1" CornerRadius="4" Padding="7,3" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding StatusText}" FontSize="11" FontWeight="SemiBold"
+                                                               Foreground="{Binding StatusForeground}" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
                 <!-- ================= ALTTTAKİ KALICI VE DİNAMİK "DEĞİŞİKLİKLERİ UYGULA" ÇUBUĞU ================= -->
                 <Border x:Name="ActionBar" Visibility="Visible" VerticalAlignment="Bottom" Margin="24,0,24,18"
                         Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
@@ -2174,5 +2297,98 @@
                 </StackPanel>
             </Border>
         </Grid>
+
+        <!-- ================= HAKKINDA KATMANI (OVERLAY) ================= -->
+        <Border x:Name="AboutOverlay" Grid.Row="1" Panel.ZIndex="10000"
+                Background="{DynamicResource SolidBackgroundFillColorBaseBrush}" Visibility="Collapsed"
+                MouseLeftButtonDown="AboutOverlay_Click" KeyDown="AboutOverlay_KeyDown">
+            <Border Width="540" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    KeyboardNavigation.TabNavigation="Cycle"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="26,22">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="40" Color="#000000" Opacity="0.55" Direction="270" ShadowDepth="8" />
+                </Border.Effect>
+                <StackPanel>
+                    <!-- Başlık -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Image Source="pack://application:,,,/Assets/PureWin_icon_64.png" Width="40" Height="40"
+                               Margin="0,0,12,0" RenderOptions.BitmapScalingMode="HighQuality" VerticalAlignment="Center" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="PureWin Hakkında" FontSize="17" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <TextBlock x:Name="AboutVersionText" Text="Sürüm 1.1.0" FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Sürüm & Sistem Bilgileri -->
+                    <Border Background="{DynamicResource SolidBackgroundFillColorSecondaryBrush}"
+                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1" CornerRadius="8" Padding="14,12" Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="96" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Sürüm" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,6" />
+                            <TextBlock x:Name="AboutVersionValue" Grid.Row="0" Grid.Column="1" Text="-" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text=".NET" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,6" />
+                            <TextBlock x:Name="AboutDotNetValue" Grid.Row="1" Grid.Column="1" Text="-" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Windows" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,6" />
+                            <TextBlock x:Name="AboutOsValue" Grid.Row="2" Grid.Column="1" Text="-" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Mimari" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,6" />
+                            <TextBlock x:Name="AboutArchValue" Grid.Row="3" Grid.Column="1" Text="-" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Yönetici" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,6" />
+                            <TextBlock x:Name="AboutAdminValue" Grid.Row="4" Grid.Column="1" Text="-" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6" />
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Konum" FontSize="11.5" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,10,0" />
+                            <TextBlock x:Name="AboutPathValue" Grid.Row="5" Grid.Column="1" Text="-" FontSize="11.5" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Sorumluluk Reddi -->
+                    <Border Background="#1AEF4444" BorderBrush="#40EF4444" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="⚠ Sorumluluk Reddi" FontSize="12" FontWeight="Bold" Foreground="#F87171" Margin="0,0,0,4" />
+                            <TextBlock Text="Bu program ile yapılan tüm işlemler (sistem ayarları, temizlik, DNS değişiklikleri vb.) kullanıcının kendi sorumluluğundadır. Oluşabilecek sorun veya veri kayıplarından kullanıcı sorumludur; önemli işlemler öncesinde yedek almanız önerilir."
+                                       FontSize="11.5" TextWrapping="Wrap" LineHeight="17" Foreground="#FCA5A5" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Alt: Telif + Kapat -->
+                    <Grid>
+                        <TextBlock Text="© 2026 hcorc (PureWin Project)" FontSize="11" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <ui:Button x:Name="AboutGitHubBtn" Content="GitHub'da Aç" Click="AboutGitHub_Click"
+                                       Appearance="Secondary" Padding="14,7" Margin="0,0,8,0"
+                                       AutomationProperties.Name="GitHub sayfasını aç"
+                                       ToolTip="https://github.com/hcorc/PureWin">
+                                <ui:Button.Icon>
+                                    <ui:SymbolIcon Symbol="ArrowUpRight24" FontSize="14" />
+                                </ui:Button.Icon>
+                            </ui:Button>
+                            <ui:Button x:Name="AboutCloseBtn" Content="Kapat" Click="AboutClose_Click"
+                                       Appearance="Primary" Padding="20,7" IsDefault="True" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
     </Grid>
 </ui:FluentWindow>

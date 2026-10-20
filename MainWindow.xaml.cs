@@ -40,6 +40,9 @@ namespace PureWin
         private bool _isScanningCleanup = false;
         private bool _isCleaning = false;
         private SystemSpecsModel? _systemSpecs;
+        private NetworkDnsWindow? _networkDnsWindow;
+        private bool _dnsHiddenForAbout;
+        private WindowState _dnsStateBeforeAbout;
 
         public MainWindow()
         {
@@ -70,10 +73,7 @@ namespace PureWin
                             {
                                 _allSoftwareUpdates = updates;
                                 UpdateSoftwareStats();
-                                if (ViewSoftwareUpdater.Visibility == Visibility.Visible)
-                                {
-                                    ApplySoftwareFilter();
-                                }
+                                ApplySoftwareFilter();
                             });
                         }
                     }
@@ -354,6 +354,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Primary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -364,6 +365,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Visible;
         }
@@ -379,6 +381,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Primary;
@@ -389,6 +392,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Visible;
         }
@@ -404,6 +408,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -414,6 +419,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Visible;
         }
@@ -429,6 +435,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -439,6 +446,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Visible;
             UpdateReportView();
@@ -455,6 +463,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -465,6 +474,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Collapsed;
         }
@@ -480,6 +490,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -490,6 +501,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Collapsed;
         }
@@ -505,6 +517,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Visible;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -515,6 +528,7 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Primary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Collapsed;
 
@@ -535,6 +549,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Visible;
             ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -545,12 +560,18 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Primary;
             NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Collapsed;
 
             if (_allSoftwareUpdates.Count == 0 && !_isScanningSoftwareUpdates)
             {
                 await LoadSoftwareUpdatesAsync();
+            }
+            else if (_allSoftwareUpdates.Count > 0)
+            {
+                ApplySoftwareFilter();
+                UpdateSoftwareStats();
             }
         }
 
@@ -565,6 +586,7 @@ namespace PureWin
             ViewStartupApps.Visibility = Visibility.Collapsed;
             ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
             ViewGamePerf.Visibility = Visibility.Visible;
+            ViewTweakAudit.Visibility = Visibility.Collapsed;
 
             NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
             NavTweaksBtn.Appearance = ControlAppearance.Secondary;
@@ -575,10 +597,168 @@ namespace PureWin
             NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
             NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
             NavGamePerfBtn.Appearance = ControlAppearance.Primary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Secondary;
 
             ActionBar.Visibility = Visibility.Visible;
 
             RefreshGamePerformanceData();
+        }
+
+        private void NavTweakAudit_Click(object sender, RoutedEventArgs e)
+        {
+            ViewBloatware.Visibility = Visibility.Collapsed;
+            ViewTweaks.Visibility = Visibility.Collapsed;
+            ViewServices.Visibility = Visibility.Collapsed;
+            ViewReport.Visibility = Visibility.Collapsed;
+            ViewCleanup.Visibility = Visibility.Collapsed;
+            ViewSystemHealth.Visibility = Visibility.Collapsed;
+            ViewStartupApps.Visibility = Visibility.Collapsed;
+            ViewSoftwareUpdater.Visibility = Visibility.Collapsed;
+            ViewGamePerf.Visibility = Visibility.Collapsed;
+            ViewTweakAudit.Visibility = Visibility.Visible;
+
+            NavBloatwareBtn.Appearance = ControlAppearance.Secondary;
+            NavTweaksBtn.Appearance = ControlAppearance.Secondary;
+            NavServicesBtn.Appearance = ControlAppearance.Secondary;
+            NavReportBtn.Appearance = ControlAppearance.Secondary;
+            NavCleanupBtn.Appearance = ControlAppearance.Secondary;
+            NavSystemHealthBtn.Appearance = ControlAppearance.Secondary;
+            NavStartupAppsBtn.Appearance = ControlAppearance.Secondary;
+            NavSoftwareUpdaterBtn.Appearance = ControlAppearance.Secondary;
+            NavGamePerfBtn.Appearance = ControlAppearance.Secondary;
+            NavTweakAuditBtn.Appearance = ControlAppearance.Primary;
+
+            ActionBar.Visibility = Visibility.Collapsed;
+
+            UpdateTweakAuditView();
+        }
+
+        private void NavNetworkDns_Click(object sender, RoutedEventArgs e)
+        {
+            if (_networkDnsWindow != null && _networkDnsWindow.IsVisible)
+            {
+                if (_networkDnsWindow.WindowState == WindowState.Minimized)
+                    _networkDnsWindow.WindowState = WindowState.Normal;
+
+                _networkDnsWindow.Activate();
+                return;
+            }
+
+            _networkDnsWindow = new NetworkDnsWindow { Owner = this };
+            _networkDnsWindow.Closed += (_, _) => _networkDnsWindow = null;
+            _networkDnsWindow.Show();
+        }
+
+        private async void AuditScan_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not System.Windows.Controls.ContentControl btn) return;
+            btn.IsEnabled = false;
+            string original = btn.Content?.ToString() ?? "🔍 Denetle";
+            btn.Content = "⏳ Taranıyor...";
+            try
+            {
+                await RefreshAllLiveStatesAsync();
+                await RefreshScheduledTasksForAuditAsync();
+                UpdateTweakAuditView(scanned: true);
+            }
+            finally
+            {
+                btn.Content = original;
+                btn.IsEnabled = true;
+            }
+        }
+
+        private async Task RefreshScheduledTasksForAuditAsync()
+        {
+            var coreTask = ScheduledTaskService.AreTasksDisabledAsync(ScheduledTaskService.CoreTelemetryTasks);
+            var optTask = ScheduledTaskService.AreTasksDisabledAsync(ScheduledTaskService.OptionalTelemetryTasks);
+            await Task.WhenAll(coreTask, optTask);
+            bool isCore = await coreTask;
+            bool isOpt = await optTask;
+
+            foreach (var t in _allTweaks.Where(x => x.IsScheduledTask))
+            {
+                t.IsApplied = (t.ScheduledTaskType == "Core") ? isCore : isOpt;
+            }
+        }
+
+        private void UpdateTweakAuditView(bool scanned = false)
+        {
+            if (_allTweaks == null || AuditActiveText == null) return;
+
+            int total = _allTweaks.Count;
+            int active = _allTweaks.Count(t => t.IsVerified);
+            int suspects = _allTweaks.Count(t => !t.IsVerified && TweakSnapshotService.HasSnapshot(t.Id));
+
+            AuditActiveText.Text = $"{active} Aktif";
+            AuditSuspectText.Text = $"{suspects} Sıfırlanmış Olabilir";
+            AuditOtherText.Text = $"{total - active - suspects} Diğer";
+            AuditLastScanText.Text = scanned
+                ? $"Son tarama: {DateTime.Now:HH:mm:ss}"
+                : "Son doğrulama: uygulama açılışı";
+
+            var greenFg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981"));
+            var greenBg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A10B981"));
+            var greenBd = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3310B981"));
+            var amberFg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F59E0B"));
+            var amberBg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1AF59E0B"));
+            var amberBd = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33F59E0B"));
+            var grayFg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9CA3AF"));
+            var grayBg = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#149CA3AF"));
+            var grayBd = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#339CA3AF"));
+
+            var rows = new List<TweakAuditRow>();
+            foreach (var t in _allTweaks)
+            {
+                bool suspect = !t.IsVerified && TweakSnapshotService.HasSnapshot(t.Id);
+                var row = new TweakAuditRow
+                {
+                    Title = t.Title,
+                    Category = t.Category,
+                    Detail = GetTweakKindText(t)
+                };
+
+                if (suspect)
+                {
+                    row.StatusText = "Sıfırlanmış Olabilir";
+                    row.StatusForeground = amberFg;
+                    row.StatusBackground = amberBg;
+                    row.StatusBorder = amberBd;
+                    row.SortOrder = 0;
+                }
+                else if (t.IsVerified)
+                {
+                    row.StatusText = "Aktif";
+                    row.StatusForeground = greenFg;
+                    row.StatusBackground = greenBg;
+                    row.StatusBorder = greenBd;
+                    row.SortOrder = 1;
+                }
+                else
+                {
+                    row.StatusText = "Pasif";
+                    row.StatusForeground = grayFg;
+                    row.StatusBackground = grayBg;
+                    row.StatusBorder = grayBd;
+                    row.SortOrder = 2;
+                }
+
+                rows.Add(row);
+            }
+
+            TweakAuditList.ItemsSource = rows
+                .OrderBy(r => r.SortOrder)
+                .ThenBy(r => r.Category)
+                .ThenBy(r => r.Title)
+                .ToList();
+        }
+
+        private static string GetTweakKindText(TweakItem t)
+        {
+            if (t.IsScheduledTask) return "Zamanlanmış Görev";
+            if (t.IsDropdown) return "Açılır Liste Ayarı";
+            if (t.Id is "EnableWindowsSandbox" or "EnableWindowsSubsystemForLinux") return "Sistem Özelliği";
+            return "Kayıt Defteri Ayarı";
         }
 
         private async void HealthAction_Click(object sender, RoutedEventArgs e)
@@ -1377,7 +1557,12 @@ namespace PureWin
 
             if (tweak.Id == "DisableAnimations")
             {
-                return SystemSettingsService.IsAnimationDisabled() && RegistryService.IsRegFileApplied(tweak.ApplyRegFile);
+                // Toggle kapalı görünüyorsa animasyonlar gerçekten açık olmalı. Bu yüzden
+                // istemci alanı animasyonu, MinAnimate veya uygulanmış .reg değerlerinden
+                // herhangi biri kapalıysa ayar "uygulanmış" (toggle AÇIK) sayılır.
+                return SystemSettingsService.IsAnimationDisabled()
+                    || SystemSettingsService.IsWindowAnimationDisabled()
+                    || RegistryService.IsRegFileApplied(tweak.ApplyRegFile);
             }
 
             if (tweak.Id == "ReduceMenuDelay")
@@ -1583,8 +1768,9 @@ namespace PureWin
             }
 
             // 2. Görsel Hız & Efektler
-            bool animApplied = _allTweaks.FirstOrDefault(t => t.Id == "DisableAnimations")?.IsVerified ?? false;
-            bool transApplied = _allTweaks.FirstOrDefault(t => t.Id == "DisableTransparency")?.IsVerified ?? false;
+            bool presetApplied = _gameTweaks?.FirstOrDefault(t => t.Id == "BestPerformanceVisualFX")?.IsApplied ?? false;
+            bool animApplied = presetApplied || (_allTweaks.FirstOrDefault(t => t.Id == "DisableAnimations")?.IsVerified ?? false);
+            bool transApplied = presetApplied || (_allTweaks.FirstOrDefault(t => t.Id == "DisableTransparency")?.IsVerified ?? false);
             if (ReportVisualStatus != null)
             {
                 if (animApplied && transApplied)
@@ -2050,7 +2236,7 @@ namespace PureWin
         </div>
 
         <div class=""footer"">
-            PureWin v1.0.0 — Pure Performance for Windows 11. Bu rapor yerel sistem doğrulamasından üretilmiştir.
+            PureWin v1.1.0 - Pure Performance for Windows 11. Bu rapor yerel sistem doğrulamasından üretilmiştir.
         </div>
     </div>
 </body>
@@ -2446,19 +2632,34 @@ namespace PureWin
                         }
                         else
                         {
+                            // DisableAnimations / DisableTransparency özel durumu: toggle OFF her zaman ilgili
+                            // özelliği gerçekten açar. Snapshot geri yükleme, önceki hal zaten kapalıysa kapalı
+                            // kalmasına ve toggle OFF görünürken özelliğin açılmamasına yol açıyordu.
+                            bool useSnapshot = tweak.Id != "DisableAnimations" && tweak.Id != "DisableTransparency";
+                            bool importOk = true;
+
                             await Task.Run(() =>
                             {
                                 if (tweak.IsPendingChecked)
                                 {
                                     if (!string.IsNullOrEmpty(tweak.ApplyRegFile))
                                     {
-                                        TweakSnapshotService.CreateSnapshot(tweak.Id, tweak.ApplyRegFile, tweak.UndoRegFile);
-                                        RegistryService.ImportRegFile(tweak.ApplyRegFile, isUndo: false);
+                                        if (useSnapshot)
+                                        {
+                                            TweakSnapshotService.CreateSnapshot(tweak.Id, tweak.ApplyRegFile, tweak.UndoRegFile);
+                                        }
+                                        else
+                                        {
+                                            TweakSnapshotService.DiscardSnapshot(tweak.Id);
+                                        }
+
+                                        importOk = RegistryService.ImportRegFile(tweak.ApplyRegFile, isUndo: false);
                                     }
 
                                     if (tweak.Id == "DisableAnimations")
                                     {
                                         SystemSettingsService.SetClientAnimationState(disable: true);
+                                        SystemSettingsService.SetWindowAnimationState(disable: true);
                                     }
                                     else if (tweak.Id == "ReduceMenuDelay")
                                     {
@@ -2480,15 +2681,16 @@ namespace PureWin
                                 else
                                 {
                                     // Geri alma sadakati: Ön-snapshot varsa birebir eski değerleri ve silinenleri geri yükle
-                                    bool restored = TweakSnapshotService.RestoreSnapshot(tweak.Id);
+                                    bool restored = useSnapshot && TweakSnapshotService.RestoreSnapshot(tweak.Id);
                                     if (!restored && !string.IsNullOrEmpty(tweak.UndoRegFile))
                                     {
-                                        RegistryService.ImportRegFile(tweak.UndoRegFile, isUndo: true);
+                                        importOk = RegistryService.ImportRegFile(tweak.UndoRegFile, isUndo: true);
                                     }
 
                                     if (tweak.Id == "DisableAnimations")
                                     {
                                         SystemSettingsService.SetClientAnimationState(disable: false);
+                                        SystemSettingsService.SetWindowAnimationState(disable: false);
                                     }
                                     else if (tweak.Id == "ReduceMenuDelay")
                                     {
@@ -2496,6 +2698,19 @@ namespace PureWin
                                     }
                                 }
                             });
+
+                            if (!importOk)
+                            {
+                                // Sessiz başarısızlığı önle: reg değişikliği uygulanamadıysa toggle'ı gerçek duruma geri döndür.
+                                tweak.IsPendingChecked = tweak.IsApplied;
+
+                                // ON denemesi başarısız olduysa yarım kalan snapshot'ı temizle.
+                                // OFF denemesinde ise snapshot geri yükleme için gerekli olduğundan korunur.
+                                if (useSnapshot && !tweak.IsApplied)
+                                {
+                                    TweakSnapshotService.DiscardSnapshot(tweak.Id);
+                                }
+                            }
                         }
 
                         tweak.IsApplied = tweak.IsPendingChecked;
@@ -2546,8 +2761,16 @@ namespace PureWin
                     ApplyBtn.Content = $"İşleniyor ({currentStep}/{totalSteps})...";
                     await Task.Delay(20);
 
-                    await GameOptimizerService.ApplySingleTweakAsync(gameTweak, gameTweak.IsPendingChecked);
-                    gameTweak.IsApplied = gameTweak.IsPendingChecked;
+                    bool applied = await GameOptimizerService.ApplySingleTweakAsync(gameTweak, gameTweak.IsPendingChecked);
+                    if (applied)
+                    {
+                        gameTweak.IsApplied = gameTweak.IsPendingChecked;
+                    }
+                    else
+                    {
+                        // İşlem başarısız olduysa checkbox'ı gerçek duruma döndür.
+                        gameTweak.IsPendingChecked = gameTweak.IsApplied;
+                    }
                 }
 
                 StatusDescText.Text = "Değişiklikler işlendi, listeler yenileniyor...";
@@ -2561,9 +2784,9 @@ namespace PureWin
                 }
 
                 // Ortak ayarları sekmeler arasında eşitle
-                if (stagedGameTweaks.Any(g => g.Id == "DisableBackgroundApps" || g.Id == "DisableAnimations" || g.Id == "DisableDVR"))
+                if (stagedGameTweaks.Any(g => g.Id == "DisableBackgroundApps" || g.Id == "DisableDVR"))
                 {
-                    foreach (var gt in stagedGameTweaks)
+                    foreach (var gt in stagedGameTweaks.Where(g => g.Id == "DisableBackgroundApps" || g.Id == "DisableDVR"))
                     {
                         var matchingTweak = _allTweaks.FirstOrDefault(t => t.Id == gt.Id);
                         if (matchingTweak != null)
@@ -2574,9 +2797,9 @@ namespace PureWin
                         }
                     }
                 }
-                if (stagedTweaks.Any(t => t.Id == "DisableBackgroundApps" || t.Id == "DisableAnimations" || t.Id == "DisableDVR"))
+                if (stagedTweaks.Any(t => t.Id == "DisableBackgroundApps" || t.Id == "DisableDVR"))
                 {
-                    foreach (var t in stagedTweaks)
+                    foreach (var t in stagedTweaks.Where(t => t.Id == "DisableBackgroundApps" || t.Id == "DisableDVR"))
                     {
                         var matchingGameTweak = _gameTweaks?.FirstOrDefault(g => g.Id == t.Id);
                         if (matchingGameTweak != null)
@@ -2631,13 +2854,18 @@ namespace PureWin
 
                 var failedApps = selectedApps.Where(a => a.IsInstalled).Select(a => a.DisplayName).ToList();
                 string failedNote = failedApps.Count > 0 ? $"\n\n⚠️ Not: Şu paketler kaldırılamadı (sistem kısıtlaması veya koruma):\n• {string.Join("\n• ", failedApps)}" : "";
+                if (!string.IsNullOrEmpty(VisualEffectsPresetService.LastRestoreWarning))
+                {
+                    failedNote += $"\n\n⚠️ Bilgi: {VisualEffectsPresetService.LastRestoreWarning}";
+                    VisualEffectsPresetService.LastRestoreWarning = null;
+                }
 
                 // 4. Yeniden Başlatma & Gezgin Yenileme Mantığı
                 var rebootFeatureNames = stagedTweaks.Where(t => t.RequiresReboot).Select(t => t.Title)
                     .Concat(stagedGameTweaks.Where(g => g.RequiresReboot && g.IsApplied).Select(g => g.Title)).ToList();
 
                 var explorerFeatureNames = stagedTweaks.Where(t => t.RequiresExplorerRestart && !t.RequiresReboot).Select(t => t.Title)
-                    .Concat(stagedGameTweaks.Where(g => g.RequiresExplorerRestart && !g.RequiresReboot && g.IsApplied).Select(g => g.Title)).ToList();
+                    .Concat(stagedGameTweaks.Where(g => g.RequiresExplorerRestart && !g.RequiresReboot).Select(g => g.Title)).ToList();
 
                 if (rebootFeatureNames.Count > 0)
                 {
@@ -4047,6 +4275,187 @@ namespace PureWin
                 });
             }
             catch { }
+        }
+        #endregion
+
+        #region Hakkında
+        private void AboutInfo_Click(object sender, RoutedEventArgs e)
+        {
+            ShowAboutOverlay();
+        }
+
+        private void ShowAboutOverlay()
+        {
+            if (AboutOverlay.Visibility == Visibility.Visible)
+            {
+                AboutCloseBtn.Focus();
+                return;
+            }
+
+            try
+            {
+                FillAboutInfo();
+            }
+            catch
+            {
+            }
+
+            HideDnsWindowForAbout();
+            AboutOverlay.Visibility = Visibility.Visible;
+            AboutOverlay.UpdateLayout();
+            AboutCloseBtn.Focus();
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (AboutOverlay.Visibility == Visibility.Visible)
+                    AboutCloseBtn.Focus();
+            }));
+        }
+
+        private void AboutClose_Click(object sender, RoutedEventArgs e)
+        {
+            HideAboutOverlay();
+        }
+
+        private void AboutOverlay_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (ReferenceEquals(e.OriginalSource, AboutOverlay))
+                HideAboutOverlay();
+        }
+
+        private void AboutOverlay_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                HideAboutOverlay();
+                e.Handled = true;
+            }
+        }
+
+        private void HideAboutOverlay()
+        {
+            if (AboutOverlay.Visibility != Visibility.Visible)
+                return;
+
+            AboutOverlay.Visibility = Visibility.Collapsed;
+
+            if (!RestoreDnsWindowAfterAbout())
+                AboutInfoBtn.Focus();
+        }
+
+        private void HideDnsWindowForAbout()
+        {
+            if (_networkDnsWindow == null || !_networkDnsWindow.IsVisible)
+                return;
+            if (_networkDnsWindow.WindowState == WindowState.Minimized)
+                return;
+
+            _dnsStateBeforeAbout = _networkDnsWindow.WindowState;
+            _dnsHiddenForAbout = true;
+            _networkDnsWindow.Hide();
+        }
+
+        private bool RestoreDnsWindowAfterAbout()
+        {
+            if (!_dnsHiddenForAbout)
+                return false;
+
+            _dnsHiddenForAbout = false;
+            if (_networkDnsWindow == null)
+                return false;
+
+            _networkDnsWindow.WindowState = _dnsStateBeforeAbout;
+            _networkDnsWindow.Show();
+            _networkDnsWindow.Activate();
+            return true;
+        }
+
+        private void AboutGitHub_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "https://github.com/hcorc/PureWin",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
+        }
+
+        private void FillAboutInfo()
+        {
+            string exePath = Environment.ProcessPath ?? string.Empty;
+
+            string version = "1.1.0";
+            string buildInfo = string.Empty;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(exePath) && System.IO.File.Exists(exePath))
+                {
+                    var fileVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(exePath);
+                    if (!string.IsNullOrWhiteSpace(fileVersion.ProductVersion))
+                        version = fileVersion.ProductVersion!.Split('+')[0];
+                    else if (!string.IsNullOrWhiteSpace(fileVersion.FileVersion))
+                        version = fileVersion.FileVersion!;
+
+                    buildInfo = $"Derleme: {System.IO.File.GetLastWriteTime(exePath):dd.MM.yyyy HH:mm}";
+                }
+            }
+            catch
+            {
+            }
+
+            AboutVersionText.Text = string.IsNullOrEmpty(buildInfo) ? $"Sürüm {version}" : $"Sürüm {version}  ·  {buildInfo}";
+            AboutVersionValue.Text = version;
+
+            AboutDotNetValue.Text = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
+            AboutArchValue.Text = $"{System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} işletim sistemi / {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture} süreç";
+            AboutPathValue.Text = exePath;
+            AboutPathValue.ToolTip = exePath;
+
+            bool isAdmin = false;
+            try
+            {
+                using var identity = WindowsIdentity.GetCurrent();
+                isAdmin = new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch
+            {
+            }
+            AboutAdminValue.Text = isAdmin ? "Evet (yönetici yetkisiyle çalışıyor)" : "Hayır";
+
+            string os = Environment.OSVersion.VersionString;
+            try
+            {
+                using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+                if (key != null)
+                {
+                    string product = key.GetValue("ProductName") as string ?? "Windows";
+                    string display = key.GetValue("DisplayVersion") as string ?? string.Empty;
+                    string build = key.GetValue("CurrentBuildNumber") as string ?? string.Empty;
+
+                    int ubr = 0;
+                    object? ubrValue = key.GetValue("UBR");
+                    if (ubrValue is int ubrInt)
+                        ubr = ubrInt;
+
+                    if (!string.IsNullOrWhiteSpace(build) && int.TryParse(build, out int buildNumber) && buildNumber >= 22000 &&
+                        product.StartsWith("Windows 10", StringComparison.OrdinalIgnoreCase))
+                    {
+                        product = "Windows 11" + product.Substring("Windows 10".Length);
+                    }
+
+                    os = product;
+                    if (!string.IsNullOrWhiteSpace(display))
+                        os += $" ({display})";
+                    if (!string.IsNullOrWhiteSpace(build))
+                        os += $" · Build {build}" + (ubr > 0 ? $".{ubr}" : string.Empty);
+                }
+            }
+            catch
+            {
+            }
+            AboutOsValue.Text = os;
         }
         #endregion
     }
