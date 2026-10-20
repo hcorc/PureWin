@@ -22,6 +22,17 @@
 
 PureWin, Windows 10/11 bilgisayarınızı hızlandırmak, gereksiz arka plan yükünü azaltmak ve gizliliğinizi güçlendirmek için geliştirilmiş kapsamlı bir optimizasyon aracıdır. Sistem ayarlarını **canlı olarak okur**, yaptığı her değişikliği izler ve dilediğiniz an geri almanızı sağlar.
 
+## 🆕 v1.1.0 Yenilikleri
+
+- **Tweak Kontrol:** Windows güncellemeleri sonrası tweak'lerin hâlâ etkin olup olmadığını salt okunur olarak denetler; değişenleri listeler.
+- **Ağ & DNS Merkezi:** Ayrı pencerede IPv4 DNS yönetimi; otomatik (DHCP) algılama, statik DNS, DNS önbelleği temizleme ve geri alma.
+- **Yazılım Güncelleyici:** winget ile yüklü uygulamaları tarar; güncellemeleri ilk açılışta otomatik listeler.
+- **Başlangıç Uygulamaları:** Kaynak ve etki bilgileriyle başlangıç yönetimi.
+- **Hakkında:** Sürüm, sistem ve konum bilgileri; GitHub butonu ve klavye erişimi.
+- **Düzeltmeler:** Hakkında odak/Tab/Enter/Esc, DNS penceresiyle sıralama ve güncelleyici ilk açılış düzeltmeleri.
+
+Ayrıntılı sürüm notları: [v1.1.0 release](https://github.com/hcorc/PureWin/releases/tag/v1.1.0)
+
 ## ✨ Öne Çıkan Özellikler
 
 | | Özellik | Ne yapar? |
@@ -35,6 +46,11 @@ PureWin, Windows 10/11 bilgisayarınızı hızlandırmak, gereksiz arka plan yü
 | 🔎 | Windows Search | Arka plan disk indekslemeyi isteğe bağlı olarak kapatır. |
 | 🧹 | Sistem Temizliği | Geçici dosyaları ve paket artıklarını derinlemesine temizler. |
 | 📊 | Canlı Sağlık Raporu | Sistem durumunu puanlar ve eksikleri tek bakışta gösterir. |
+| 🛡️ | Tweak Kontrol | Güncelleme sonrası tweak durumlarını salt okunur denetler; değişenleri listeler. |
+| 🌐 | Ağ & DNS Merkezi | IPv4 DNS'i otomatik (DHCP) veya statik yönetir; önbelleği temizler ve değişiklikleri geri alır. |
+| ⬆️ | Yazılım Güncelleyici | winget ile yüklü uygulamaları tarar, güncellemeleri listeler ve tek tıkla uygular. |
+| 🚦 | Başlangıç Uygulamaları | Başlangıçta açılan uygulamaları etki dereceleriyle gösterir; tek tıkla açar/kapatır. |
+| ℹ️ | Hakkında | Sürüm, sistem ve konum bilgileri; GitHub bağlantısı ve klavye erişimi. |
 | ⏪ | Geri Alma | Uygulanan tüm değişiklikler uygulama içinden geri alınabilir. |
 
 ## 📷 Ekran Görüntüleri
@@ -54,13 +70,23 @@ PureWin, Windows 10/11 bilgisayarınızı hızlandırmak, gereksiz arka plan yü
   <i>Bloatware Kaldırıcı — gereksiz önyüklü uygulamaları temizleyin</i>
 </p>
 
+<p align="center">
+  <img src="images/screenshot-4.png" alt="Tweak Kontrol" width="800"><br>
+  <i>Tweak Kontrol — güncelleme sonrası tweak durumlarını denetleyin</i>
+</p>
+
+<p align="center">
+  <img src="images/screenshot-5.png" alt="Yazılım Güncelleyici" width="800"><br>
+  <i>Yazılım Güncelleyici — winget ile güncellemeleri tek tıkla uygulayın</i>
+</p>
+
 ## 🚀 Hızlı Başlangıç
 
 En kolay yol — **[Releases](../../releases)** sayfasından hazır paketi indirin:
 
 1. Size uygun paketi indirin:
-   - **`PureWin_Portable_v1.zip`** — **Önerilen.** Kurulum gerektirmez; .NET dahil her şeyi kendi içinde taşır.
-   - **`PureWin_Lite_v1.zip`** — Küçük boyutlu sürüm; bilgisayarınızda .NET 8 Desktop Runtime gerektirir.
+   - **`PureWin_Portable_v1.1.0.zip`** — **Önerilen.** Kurulum gerektirmez; .NET dahil her şeyi kendi içinde taşır.
+   - **`PureWin_Lite_v1.1.0.zip`** — Küçük boyutlu sürüm; bilgisayarınızda .NET 8 Desktop Runtime gerektirir.
 2. ZIP dosyasını bir klasöre çıkarın.
 3. `PureWin.exe` dosyasına çift tıklayın.
 
@@ -92,12 +118,13 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 
 ```
 PureWin/
-├─ Services/            # Optimizasyon servisleri (telemetri, servisler, oyun, temizlik...)
+├─ Services/            # Optimizasyon servisleri (telemetri, servisler, oyun, temizlik, DNS...)
 ├─ Models/              # Veri modelleri
 ├─ Helpers/             # Yardımcı sınıflar
 ├─ Assets/              # İkon ve görseller
 ├─ Config/              # Uygulama veritabanı (bloatware listesi)
-├─ Regfiles/            # Registry düzenleme dosyaları (280 adet)
+├─ Regfiles/            # Registry düzenleme dosyaları (282 adet)
+├─ NetworkDnsWindow.xaml(.cs) # Ağ & DNS Merkezi
 ├─ MainWindow.xaml(.cs) # Ana arayüz
 └─ PureWin.csproj
 ```
