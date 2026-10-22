@@ -3,3 +3,7 @@ Windows Registry Editor Version 5.00
 ; Show OneDrive on Navigation Pane for current user
 [HKEY_CURRENT_USER\Software\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
 "System.IsPinnedToNameSpaceTree"=dword:00000001
+
+; OneDrive for Business
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{04271989-C4D2-4316-9EA9-D3F7A8A5F1A2}]
+"System.IsPinnedToNameSpaceTree"=dword:00000001

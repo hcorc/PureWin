@@ -115,6 +115,10 @@ namespace PureWin.Services
                 new() { AppId = "Microsoft.WindowsSoundRecorder", DisplayName = "Ses Kaydedici", Description = "Dahili ses kayıt aracı.", IsSafe = false },
                 new() { AppId = "Microsoft.ZuneMusic", DisplayName = "Medya Oynatıcı", Description = "Dahili medya oynatıcı.", IsSafe = false },
                 new() { AppId = "Microsoft.XboxApp", DisplayName = "Xbox Konsol Uygulaması", Description = "Xbox arka plan servisleri.", IsSafe = false },
+                new() { AppId = "Microsoft.XboxIdentityProvider", DisplayName = "Xbox Kimlik Sağlayıcı", Description = "Xbox oturum açma çerçevesi; bazı oyunlar için gereklidir.", IsSafe = false },
+                new() { AppId = "Microsoft.XboxSpeechToTextOverlay", DisplayName = "Xbox Konuşma Metne Dönüştürme", Description = "Xbox erişilebilirlik katmanı; bazı oyunlarda gereklidir.", IsSafe = false },
+                new() { AppId = "Microsoft.Xbox.TCUI", DisplayName = "Xbox TCUI Çerçevesi", Description = "Xbox arayüz çerçevesi; bazı oyunlar için gereklidir.", IsSafe = false },
+                new() { AppId = "Microsoft.GetHelp", DisplayName = "Get Help (Yardım Al)", Description = "Windows sorun gidericilerine bağlanan yardım uygulaması.", IsSafe = true },
                 new() { AppId = "Microsoft.YourPhone", DisplayName = "Telefon Bağlantısı", Description = "Telefon eşleme aracı.", IsSafe = false }
             };
         }

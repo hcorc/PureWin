@@ -138,6 +138,71 @@ namespace PureWin.Services
         }
 
         /// <summary>
+        /// .reg dosyası olmayan tekil registry değerleri için ön-snapshot alır.
+        /// Game Mode gibi doğrudan Registry.SetValue ile yönetilen ayarların
+        /// orijinalde "değer yok" durumunu birebir geri getirebilmek için kullanılır.
+        /// </summary>
+        public static void CreateSnapshotForRegistryValues(
+            string tweakId,
+            params (string RootKey, string SubKeyPath, string ValueName)[] targets)
+        {
+            try
+            {
+                string snapshotPath = GetSnapshotFilePath(tweakId);
+                if (File.Exists(snapshotPath))
+                    return;
+
+                if (targets == null || targets.Length == 0)
+                    return;
+
+                var snapshot = new TweakSnapshot
+                {
+                    TweakId = tweakId,
+                    Timestamp = DateTime.Now
+                };
+
+                foreach (var (rootName, subKeyPath, valueName) in targets)
+                {
+                    var entry = new RegistryValueSnapshot
+                    {
+                        RootKey = rootName,
+                        SubKeyPath = subKeyPath,
+                        ValueName = valueName
+                    };
+
+                    using var rootKey = GetRootKey(rootName);
+                    if (rootKey != null)
+                    {
+                        using var subKey = rootKey.OpenSubKey(subKeyPath, false);
+                        if (subKey != null)
+                        {
+                            object? val = subKey.GetValue(valueName, null);
+                            if (val != null)
+                            {
+                                entry.Exists = true;
+                                var kind = subKey.GetValueKind(valueName);
+                                entry.ValueKind = kind.ToString();
+
+                                string jsonVal = JsonSerializer.Serialize(val);
+                                using var doc = JsonDocument.Parse(jsonVal);
+                                entry.ValueData = doc.RootElement.Clone();
+                            }
+                        }
+                    }
+
+                    snapshot.Entries.Add(entry);
+                }
+
+                string json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(snapshotPath, json, Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[TweakSnapshotService] CreateSnapshotForRegistryValues failed for {tweakId}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Alınan snapshot'ı kullanarak ayarları tweak öncesindeki orijinal haline döndürür.
         /// Orijinalde var olan değerleri birebir eski tür ve verisiyle yazar, orijinalde olmayanları ise siler.
         /// Snapshot başarıyla geri yüklendiyse true, snapshot bulunamadıysa false döner.

@@ -103,7 +103,9 @@ namespace PureWin.Services
             bool applySuccess;
             if (useDhcp)
             {
-                string script = $"netsh interface ipv4 set dnsservers name=\\\"{adapter.Name}\\\" source=dhcp";
+                // netsh, bazı sistemlerde exit code 0 dönse bile adaptörün DNS'ini
+                // gerçekten DHCP'ye çevirmeyebiliyor. Cmdlet daha güvenilir.
+                string script = $"Set-DnsClientServerAddress -InterfaceIndex {adapter.IfIndex} -ResetServerAddresses; Clear-DnsClientCache -ErrorAction SilentlyContinue";
                 var (ok, _, _) = await RunPowerShellCommandAsync(script);
                 applySuccess = ok;
             }
@@ -206,7 +208,8 @@ namespace PureWin.Services
                 bool applyOk;
                 if (snapshot.Ipv4WasAutomatic)
                 {
-                    string script = $"netsh interface ipv4 set dnsservers name=\\\"{snapshot.AdapterName}\\\" source=dhcp";
+                    // netsh yerine doğrudan cmdlet: adaptör gerçekten DHCP'ye dönsün.
+                    string script = $"Set-DnsClientServerAddress -InterfaceIndex {snapshot.IfIndex} -ResetServerAddresses; Clear-DnsClientCache -ErrorAction SilentlyContinue";
                     var (ok, _, _) = await RunPowerShellCommandAsync(script);
                     applyOk = ok;
                 }
@@ -220,26 +223,32 @@ namespace PureWin.Services
 
                 if (!applyOk) return false;
 
-                await Task.Delay(300);
+                // Ağ yığını gecikmeli güncellenebilir; birkaç kez doğrula.
+                for (int attempt = 0; attempt < 6; attempt++)
+                {
+                    await Task.Delay(500);
 
-                // Geri yüklemeyi doğrula (otomatik: registry NameServer boş; statik: sunucu kümesi eşit)
-                if (snapshot.Ipv4WasAutomatic)
-                {
-                    var (verifyOk, isAutoNow, _) = await GetIpv4DnsAutomaticStateAsync(snapshot.IfIndex);
-                    return verifyOk && isAutoNow;
-                }
-                else
-                {
-                    if (snapshot.Ipv4Servers == null || snapshot.Ipv4Servers.Count == 0)
+                    // Otomatik: registry NameServer boş; statik: sunucu kümesi eşit
+                    if (snapshot.Ipv4WasAutomatic)
                     {
-                        return false;
+                        var (verifyOk, isAutoNow, _) = await GetIpv4DnsAutomaticStateAsync(snapshot.IfIndex);
+                        if (verifyOk && isAutoNow)
+                            return true;
                     }
+                    else
+                    {
+                        if (snapshot.Ipv4Servers == null || snapshot.Ipv4Servers.Count == 0)
+                            return false;
 
-                    var (currentServers, _) = await ReadCurrentIpv4DnsServersAsync(snapshot.IfIndex);
-                    var expectedSet = new HashSet<string>(snapshot.Ipv4Servers, StringComparer.OrdinalIgnoreCase);
-                    var actualSet = new HashSet<string>(currentServers, StringComparer.OrdinalIgnoreCase);
-                    return expectedSet.SetEquals(actualSet);
+                        var (currentServers, _) = await ReadCurrentIpv4DnsServersAsync(snapshot.IfIndex);
+                        var expectedSet = new HashSet<string>(snapshot.Ipv4Servers, StringComparer.OrdinalIgnoreCase);
+                        var actualSet = new HashSet<string>(currentServers, StringComparer.OrdinalIgnoreCase);
+                        if (expectedSet.SetEquals(actualSet))
+                            return true;
+                    }
                 }
+
+                return false;
             }
             catch (Exception ex)
             {

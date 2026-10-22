@@ -315,6 +315,95 @@ namespace PureWin.Services
             }
         }
 
+        /// <summary>
+        /// AI servisinin (WSAIFabricSvc) otomatik başlatılmasının engellenip engellenmediğini kontrol eder.
+        /// Hem "Manual" (3) hem de "Disabled" (4) durumları otomatik başlatmayı engellediği için geçerli sayılır.
+        /// Raphire Win11Debloat gibi araçlar servisi "Manual" (3) olarak beklediğinden uygulama da 3 yazar.
+        /// </summary>
+        public static bool IsAIServiceAutoStartPrevented()
+        {
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\WSAIFabricSvc", false);
+                if (key == null) return false;
+                object? start = key.GetValue("Start");
+                return start is int value && (value == 3 || value == 4);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Widget'ların kapatılıp kapatılmadığını kontrol eder.
+        /// Windows 11 bazı sürümlerde TaskbarDa değerini siliyor; bu yüzden resmi Dsh politikası
+        /// tek başına da yeterli kabul edilir (aksi halde toggle her açılışta kapalı görünüyordu).
+        /// </summary>
+        public static bool AreWidgetsDisabled()
+        {
+            try
+            {
+                using (var dsh = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Dsh", false))
+                {
+                    if (dsh?.GetValue("AllowNewsAndInterests") is int policy && policy == 0)
+                        return true;
+                }
+
+                using (var advanced = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", false))
+                {
+                    if (advanced?.GetValue("TaskbarDa") is int taskbar && taskbar == 0)
+                        return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// OneDrive'ın gezgin sol panelinden gizlenip gizlenmediğini kontrol eder.
+        /// OneDrive kurulu değilse ilgili CLSID anahtarı hiç oluşmaz; bu durumda tweak daha önce
+        /// uygulanmışsa (snapshot varsa) "gizli" kabul edilir. Aksi halde toggle her açılışta kapanıyordu.
+        /// </summary>
+        public static bool IsOneDriveHidden()
+        {
+            try
+            {
+                string[] clsids =
+                {
+                    "{018D5C66-4533-4307-9B53-224DE2ED1FE6}", // OneDrive (kişisel)
+                    "{04271989-C4D2-4316-9EA9-D3F7A8A5F1A2}"  // OneDrive for Business
+                };
+
+                bool anyKeyExists = false;
+                foreach (string clsid in clsids)
+                {
+                    using var key = Registry.CurrentUser.OpenSubKey($@"Software\Classes\CLSID\{clsid}", false);
+                    if (key == null) continue;
+
+                    object? value = key.GetValue("System.IsPinnedToNameSpaceTree");
+                    if (value == null) continue;
+
+                    anyKeyExists = true;
+                    if (!(value is int pinned && pinned == 0))
+                        return false;
+                }
+
+                if (!anyKeyExists)
+                    return TweakSnapshotService.HasSnapshot("HideOnedrive");
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static string ParseExpectedValue(string rawData)
         {
             if (rawData.StartsWith("dword:", StringComparison.OrdinalIgnoreCase))

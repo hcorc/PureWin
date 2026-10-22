@@ -1,6 +1,6 @@
 {
     "Version":  "2.0",
-    "TotalApps":  132,
+    "TotalApps":  136,
     "Apps":  [
                  {
                      "AppId":  "Microsoft.Edge",
@@ -295,6 +295,38 @@
                      "DisplayName":  "Xbox Konsol Uygulaması",
                      "Description":  "Xbox konsol eşleme ve arka plan servisleri.",
                      "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  true,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.XboxIdentityProvider",
+                     "DisplayName":  "Xbox Kimlik Sağlayıcı",
+                     "Description":  "Xbox oturum açma çerçevesi; bazı oyunlar için gereklidir.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.XboxSpeechToTextOverlay",
+                     "DisplayName":  "Xbox Konuşma Metne Dönüştürme",
+                     "Description":  "Xbox erişilebilirlik katmanı; bazı oyunlarda sesli komutlar için gereklidir.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.Xbox.TCUI",
+                     "DisplayName":  "Xbox TCUI Çerçevesi",
+                     "Description":  "Xbox arayüz çerçevesi; bazı oyunlar ve Mağaza entegrasyonu için gereklidir.",
+                     "Category":  "Xbox Oyun Bileşenleri",
+                     "IsSafe":  false,
+                     "RemovalMethod":  "Appx"
+                 },
+                 {
+                     "AppId":  "Microsoft.GetHelp",
+                     "DisplayName":  "Get Help (Yardım Al)",
+                     "Description":  "Windows sorun gidericilerine bağlanan yardım uygulaması.",
+                     "Category":  "Microsoft Bileşeni",
                      "IsSafe":  true,
                      "RemovalMethod":  "Appx"
                  },

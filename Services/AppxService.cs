@@ -336,7 +336,15 @@ namespace PureWin.Services
                         }
                         Start-Sleep -Milliseconds 400
 
-                        # 2. Appx / MSIX Paketlerini hem mevcut kullanıcı hem tüm kullanıcılar için kaldır
+                        # 2. İsteğe bağlı sağlanan (Provisioned) paketleri ÖNCE temizle:
+                        #    Böylece Windows, paketi işlem sırasında yeniden kurmaz.
+                        Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object { 
+                            $_.DisplayName -like ""*$appId*"" -or $_.PackageName -like ""*$appId*"" 
+                        } | ForEach-Object {
+                            Remove-AppxProvisionedPackage -Online -PackageName $_.PackageName -ErrorAction Continue
+                        }
+
+                        # 3. Appx / MSIX Paketlerini hem mevcut kullanıcı hem tüm kullanıcılar için kaldır
                         $packages = Get-AppxPackage -AllUsers -Name ""*$appId*"" -ErrorAction SilentlyContinue
                         if (-not $packages) {
                             $packages = Get-AppxPackage -Name ""*$appId*"" -ErrorAction SilentlyContinue
@@ -344,13 +352,6 @@ namespace PureWin.Services
                         foreach ($pkg in $packages) {
                             Remove-AppxPackage -Package $pkg.PackageFullName -ErrorAction Continue
                             Remove-AppxPackage -Package $pkg.PackageFullName -AllUsers -ErrorAction Continue
-                        }
-
-                        # 3. İsteğe bağlı sağlanan (Provisioned) paketleri temizle
-                        Get-AppxProvisionedPackage -Online -ErrorAction SilentlyContinue | Where-Object { 
-                            $_.DisplayName -like ""*$appId*"" -or $_.PackageName -like ""*$appId*"" 
-                        } | ForEach-Object {
-                            Remove-AppxProvisionedPackage -Online -PackageName $_.PackageName -ErrorAction Continue
                         }
 
                         # 4. Winget kaldırma yöntemi

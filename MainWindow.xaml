@@ -254,6 +254,7 @@
                 <Grid x:Name="ViewBloatware" Visibility="Collapsed" Margin="24,16,24,90">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -276,7 +277,7 @@
                                            FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0" />
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel x:Name="BloatwareQuickSelectPanel" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <ui:Button Content="🛡️ Güvenlileri Seç" Click="SelectSafeApps_Click" Appearance="Secondary" Padding="11,6" Margin="0,0,8,0" />
                                 <ui:Button Content="☑️ Tümünü Seç" Click="SelectAllApps_Click" Appearance="Secondary" Padding="11,6" Margin="0,0,8,0" />
                                 <ui:Button Content="🔄 Temizle" Click="ClearAppSelection_Click" Appearance="Secondary" Padding="11,6" />
@@ -305,7 +306,80 @@
                         </Border>
                     </Grid>
 
-                    <Grid Grid.Row="1">
+                    <!-- Canlı Bloatware Kaldırma İlerlemesi -->
+                    <Border x:Name="BloatwareProgressCard" Grid.Row="1" Visibility="Collapsed"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="#3B82F6" BorderThickness="1.2" CornerRadius="10"
+                            Padding="14,11" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <ProgressBar x:Name="BloatwareCurrentSpinner" Grid.Column="0"
+                                         IsIndeterminate="True" Width="36" Height="4"
+                                         Foreground="#3B82F6" VerticalAlignment="Center"
+                                         Margin="0,0,14,0" />
+
+                            <StackPanel Grid.Column="1">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock x:Name="BloatwareProgressTitle" Text="Kaldırma işlemi sürüyor"
+                                               FontWeight="SemiBold" FontSize="13"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                    <Border x:Name="BloatwareLiveBadge" Background="#1A3B82F6" BorderBrush="#333B82F6"
+                                            BorderThickness="1" CornerRadius="6" Padding="7,2" Margin="8,0,0,0"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="● Canlı" FontSize="10" FontWeight="SemiBold" Foreground="#60A5FA" />
+                                    </Border>
+                                </StackPanel>
+
+                                <TextBlock x:Name="BloatwareCurrentText" Text="Şu an: hazırlanıyor…"
+                                           FontSize="12" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                           Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+
+                                <ProgressBar x:Name="BloatwareProgressBar" Height="6" Minimum="0" Maximum="100" Value="0"
+                                             Foreground="#3B82F6" Background="#263B82F6" BorderThickness="0"
+                                             Margin="0,7,0,0" />
+
+                                <Grid Margin="0,6,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock x:Name="BloatwareProgressStage" Grid.Column="0"
+                                               Text="Paket ve artıklar temizleniyor…"
+                                               FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock x:Name="BloatwareRemainingText" Text="Kalan: 0" FontSize="10.5"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock x:Name="BloatwareSuccessText" Text="✓ 0" FontSize="10.5" FontWeight="SemiBold"
+                                                   Foreground="#10B981" Margin="12,0,0,0" />
+                                        <TextBlock x:Name="BloatwareFailText" Text="✗ 0" FontSize="10.5" FontWeight="SemiBold"
+                                                   Foreground="#EF4444" Margin="12,0,0,0" />
+                                        <TextBlock x:Name="BloatwareElapsedText" Text="⏱ 00:00" FontSize="10.5"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="12,0,0,0" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="16,0,0,0">
+                                <TextBlock x:Name="BloatwareProgressCount" Text="Tamamlanan: 0 / 0"
+                                           FontWeight="Bold" FontSize="15"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                           HorizontalAlignment="Right" />
+                                <TextBlock x:Name="BloatwareProgressPercent" Text="%0" FontSize="11"
+                                           FontWeight="SemiBold" Foreground="#3B82F6"
+                                           HorizontalAlignment="Right" Margin="0,2,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="2">
                         <!-- Temiz Sistem Durumu Bildirim Kartı (Kurulu paket olmadığında görünür) -->
                         <Border x:Name="CleanSystemCard" Visibility="Collapsed" Background="#1210B981" BorderBrush="#3310B981" 
                                 BorderThickness="1" CornerRadius="12" Padding="28,24" VerticalAlignment="Top" Margin="0,10,0,0">
@@ -352,6 +426,16 @@
                                                 </StackPanel>
 
                                                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <!-- Canlı Kaldırma Durumu Rozeti -->
+                                                    <Border CornerRadius="6" Padding="8,2" Margin="0,0,8,0"
+                                                            Visibility="{Binding IsRemovalStatusVisible, Converter={local:BooleanToVisibilityConverter}}"
+                                                            Background="{Binding RemovalState, Converter={local:RemovalStateBackgroundConverter}}"
+                                                            BorderBrush="{Binding RemovalState, Converter={local:RemovalStateBorderConverter}}" BorderThickness="1">
+                                                        <TextBlock Text="{Binding RemovalStatusText}" 
+                                                                   FontSize="10" FontWeight="SemiBold"
+                                                                   Foreground="{Binding RemovalState, Converter={local:RemovalStateForegroundConverter}}" />
+                                                    </Border>
+
                                                     <!-- Canlı Kurulum Durumu Rozeti -->
                                                     <Border CornerRadius="6" Padding="8,2" Margin="0,0,8,0"
                                                             Background="{Binding IsInstalled, Converter={local:InstalledBadgeBackgroundConverter}}"
@@ -1481,7 +1565,7 @@
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                     <TextBlock x:Name="StatPendingUpdatesText" Text="Taranıyor..." FontSize="17" FontWeight="Bold" Foreground="#10B981" />
-                                    <TextBlock Text="Güncelleme Bekliyor" FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <TextBlock x:Name="StatPendingUpdatesSubText" Text="Güncelleme Durumu" FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -2318,7 +2402,7 @@
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="PureWin Hakkında" FontSize="17" FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
-                            <TextBlock x:Name="AboutVersionText" Text="Sürüm 1.1.0" FontSize="12"
+                            <TextBlock x:Name="AboutVersionText" Text="Sürüm 1.1.1" FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0" />
                         </StackPanel>
                     </StackPanel>

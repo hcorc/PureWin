@@ -686,8 +686,45 @@ namespace PureWin.Services
                     case "GameMode":
                         try
                         {
-                            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", enable ? 1 : 0, RegistryValueKind.DWord);
-                            Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode", enable ? 1 : 0, RegistryValueKind.DWord);
+                            // İlk değişiklik hangi yönde olursa olsun, o anki gerçek
+                            // registry halini (değer yok / 0 / 1) yedekle.
+                            bool hadSnapshot = TweakSnapshotService.HasSnapshot("GameOpt_GameMode");
+
+                            if (enable)
+                            {
+                                if (!hadSnapshot)
+                                {
+                                    TweakSnapshotService.CreateSnapshotForRegistryValues(
+                                        "GameOpt_GameMode",
+                                        ("HKEY_CURRENT_USER", @"Software\Microsoft\GameBar", "AutoGameModeEnabled"),
+                                        ("HKEY_CURRENT_USER", @"Software\Microsoft\GameBar", "AllowAutoGameMode"));
+                                }
+
+                                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1, RegistryValueKind.DWord);
+                                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode", 1, RegistryValueKind.DWord);
+                            }
+                            else if (hadSnapshot)
+                            {
+                                // Daha önce alınmış orijinal hale dön.
+                                bool restored = TweakSnapshotService.RestoreSnapshot("GameOpt_GameMode");
+                                if (!restored)
+                                {
+                                    Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0, RegistryValueKind.DWord);
+                                    Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode", 0, RegistryValueKind.DWord);
+                                }
+                            }
+                            else
+                            {
+                                // İlk işlem doğrudan kapatma ise mevcut hali yedekle,
+                                // sonra kapat. Böylece ileride aç/kapa orijinal hale dönebilir.
+                                TweakSnapshotService.CreateSnapshotForRegistryValues(
+                                    "GameOpt_GameMode",
+                                    ("HKEY_CURRENT_USER", @"Software\Microsoft\GameBar", "AutoGameModeEnabled"),
+                                    ("HKEY_CURRENT_USER", @"Software\Microsoft\GameBar", "AllowAutoGameMode"));
+
+                                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0, RegistryValueKind.DWord);
+                                Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode", 0, RegistryValueKind.DWord);
+                            }
                         }
                         catch { }
                         break;

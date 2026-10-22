@@ -232,6 +232,26 @@ namespace PureWin.Services
                             };
 
                             EnrichAppMetadata(item);
+
+                            // App Installer, winget'in kendi barındırıcısıdır ve çalışırken kendini güncelleyemez.
+                            // Ayrıca winget'in bildirdiği sürüm bazen eski kalır; gerçek Appx sürümüyle karşılaştır.
+                            if (item.Id.Equals("Microsoft.AppInstaller", StringComparison.OrdinalIgnoreCase))
+                            {
+                                string appxVersion = GetInstalledAppxVersion("Microsoft.DesktopAppInstaller");
+                                if (!string.IsNullOrWhiteSpace(appxVersion))
+                                    item.CurrentVersion = appxVersion;
+
+                                if (TryParseVersion(item.CurrentVersion, out Version? currentVersion) &&
+                                    TryParseVersion(item.AvailableVersion, out Version? latestVersion) &&
+                                    currentVersion >= latestVersion)
+                                {
+                                    // Zaten güncel: listeye hiç ekleme.
+                                    continue;
+                                }
+
+                                item.StatusMessage = "Mağaza'dan güncellenmeli";
+                            }
+
                             results.Add(item);
                         }
                         catch
@@ -427,6 +447,50 @@ namespace PureWin.Services
         }
 
         /// <summary>
+        /// Kurulu bir Appx paketinin gerçek sürümünü döndürür (winget'in eski/yanlış sürüm bildirimini düzeltmek için).
+        /// </summary>
+        private static string GetInstalledAppxVersion(string packageName)
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-NoProfile -NonInteractive -Command \"(Get-AppxPackage -Name '{packageName}' | Select-Object -First 1).Version\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+
+                using var process = Process.Start(psi);
+                if (process == null) return string.Empty;
+
+                string output = process.StandardOutput.ReadToEnd().Trim();
+                process.StandardError.ReadToEnd();
+                process.WaitForExit(15000);
+                return output;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static bool TryParseVersion(string? value, out Version? version)
+        {
+            version = null;
+            if (string.IsNullOrWhiteSpace(value)) return false;
+
+            string clean = value.Trim();
+            int suffixIndex = clean.IndexOfAny(new[] { '-', '+' });
+            if (suffixIndex > 0)
+                clean = clean.Substring(0, suffixIndex);
+
+            return Version.TryParse(clean, out version);
+        }
+
+        /// <summary>
         /// Tek bir yazılımı winget ile arka planda sessizce günceller (Akıllı çift katmanlı deneme ve sistem paketi desteğiyle).
         /// </summary>
         public static async Task<bool> UpdateAppAsync(SoftwareUpdateItem item, CancellationToken cancellationToken = default)
@@ -446,6 +510,30 @@ namespace PureWin.Services
             {
                 try
                 {
+                    // App Installer'ı winget ile güncellemek mümkün değildir: winget bu paketin içinden
+                    // çalıştığı için paket kilitli olur. Gerçek sürümü kontrol et, güncelse başarılı say;
+                    // değilse kullanıcıyı Microsoft Store'a yönlendir.
+                    if (item.Id.Equals("Microsoft.AppInstaller", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string appxVersion = GetInstalledAppxVersion("Microsoft.DesktopAppInstaller");
+                        if (!string.IsNullOrWhiteSpace(appxVersion))
+                            item.CurrentVersion = appxVersion;
+
+                        if (TryParseVersion(item.CurrentVersion, out Version? currentVersion) &&
+                            TryParseVersion(item.AvailableVersion, out Version? latestVersion) &&
+                            currentVersion >= latestVersion)
+                        {
+                            item.State = SoftwareUpdateState.Completed;
+                            item.StatusMessage = "✓ Güncel";
+                            return true;
+                        }
+
+                        item.State = SoftwareUpdateState.Failed;
+                        item.StatusMessage = "Mağaza'dan güncellenmeli";
+                        item.ErrorMessage = "winget, App Installer paketini kendi çalışırken güncelleyemez. Microsoft Store > Kitaplık bölümünden güncelleyin.";
+                        return false;
+                    }
+
                     // 1. Aşama: Standart Sessiz Yükseltme
                     string upgradeArgs = $"upgrade --id \"{item.Id}\" --silent --accept-package-agreements --accept-source-agreements --disable-interactivity";
                     var (exitCode, _) = ExecuteWingetProcess(wingetPath, upgradeArgs);

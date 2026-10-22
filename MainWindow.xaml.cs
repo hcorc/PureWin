@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using PureWin.Models;
 using PureWin.Services;
 using System.Security.Principal;
@@ -37,6 +38,16 @@ namespace PureWin
         private bool _isUpdatingPing = false;
         private bool _isLoaded = false;
         private bool _isApplying = false;
+        private bool _isApplyingBulkChanges = false;
+        private DispatcherTimer? _bloatwareProgressTimer;
+        private Stopwatch? _bloatwareStopwatch;
+        private int _bloatwareTotal;
+        private int _bloatwareProcessed;
+        private int _bloatwareSucceeded;
+        private int _bloatwareFailed;
+        private bool _bloatwareLoopFinished;
+        private bool _bloatwareCompleted;
+        private bool _bloatwareCleanResiduals;
         private bool _isScanningCleanup = false;
         private bool _isCleaning = false;
         private SystemSpecsModel? _systemSpecs;
@@ -328,6 +339,7 @@ namespace PureWin
 
         private void FilterBloatware_Changed(object sender, RoutedEventArgs e)
         {
+            if (_isApplyingBulkChanges) return;
             if (_allBloatwareApps == null || _allBloatwareApps.Count == 0) return;
             ApplyBloatwareFilter();
             UpdateActionBar();
@@ -335,6 +347,7 @@ namespace PureWin
 
         private void ShowAllCatalog_Click(object sender, RoutedEventArgs e)
         {
+            if (_isApplyingBulkChanges) return;
             if (FilterInstalledOnlyCheck != null)
             {
                 FilterInstalledOnlyCheck.IsChecked = false;
@@ -1224,6 +1237,11 @@ namespace PureWin
         {
             if (sender is Wpf.Ui.Controls.ToggleSwitch toggle && toggle.DataContext is StartupAppItem item)
             {
+                // Click olayı, ToggleSwitch'in IsChecked değeri güncellenmeden önce
+                // tetiklenebiliyor. Eski değeri okuyup ters işlem yapmayı önlemek için
+                // binding'in oturmasını bir dispatcher turu bekle.
+                await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
+
                 bool newState = toggle.IsChecked == true;
                 bool success = StartupAppService.SetStartupAppState(item, newState);
                 if (!success)
@@ -1553,6 +1571,30 @@ namespace PureWin
             if (tweak.Id == "DisableStickyKeys")
             {
                 return SystemSettingsService.IsStickyKeysShortcutDisabled();
+            }
+
+            if (tweak.Id == "DisableAISvcAutoStart")
+            {
+                // Servis "Manual" (3) veya "Disabled" (4) ise otomatik başlatma engellenmiştir.
+                return RegistryService.IsAIServiceAutoStartPrevented();
+            }
+
+            if (tweak.Id == "DisableWidgets")
+            {
+                // Windows TaskbarDa değerini sıfırlayabildiği için Dsh politikası tek başına da geçerlidir.
+                return RegistryService.AreWidgetsDisabled();
+            }
+
+            if (tweak.Id == "HideOnedrive")
+            {
+                // OneDrive kurulu değilken CLSID anahtarı yoktur; snapshot varsa tweak uygulanmış sayılır.
+                return RegistryService.IsOneDriveHidden();
+            }
+
+            if (tweak.Id == "DisableStoreSearchSuggestions")
+            {
+                // Windows 11 24H2+ için resmi IsStoreSuggestionsEnabled ayarı; eski sürümlerde store.db yedeği.
+                return StoreSearchSuggestionService.IsDisabled();
             }
 
             if (tweak.Id == "DisableAnimations")
@@ -2236,7 +2278,7 @@ namespace PureWin
         </div>
 
         <div class=""footer"">
-            PureWin v1.1.0 - Pure Performance for Windows 11. Bu rapor yerel sistem doğrulamasından üretilmiştir.
+            PureWin v1.1.1 - Pure Performance for Windows 11. Bu rapor yerel sistem doğrulamasından üretilmiştir.
         </div>
     </div>
 </body>
@@ -2247,7 +2289,7 @@ namespace PureWin
         #region Değişiklik Takibi ve Alt Çubuk
         private void OnBloatwareCheckChanged(object sender, RoutedEventArgs e)
         {
-            if (!_isLoaded) return;
+            if (!_isLoaded || _isApplyingBulkChanges) return;
             Dispatcher.BeginInvoke(new Action(UpdateActionBar));
         }
 
@@ -2289,6 +2331,11 @@ namespace PureWin
         private void UpdateActionBar()
         {
             if (!_isLoaded || _allTweaks == null || _allBloatwareApps == null || _allServices == null || ActionBar == null || ApplyBtn == null || CancelBtn == null || ActionProgressBar == null)
+                return;
+
+            // Toplu uygulama sürerken seçim değişiklikleri alt bardaki gerçek ilerlemeyi sıfırlamasın.
+            // (Servisleri toplu açma akışı _isApplying kullanır ama bu bayrağı kullanmaz.)
+            if (_isApplyingBulkChanges)
                 return;
 
             int changedTweaks = _allTweaks.Count(t => t.IsStaged);
@@ -2337,9 +2384,206 @@ namespace PureWin
         }
         #endregion
 
+        #region Bloatware İlerleme Yönetimi
+        private void ResetBloatwareProgressState()
+        {
+            StopBloatwareProgressTimer();
+            _bloatwareTotal = 0;
+            _bloatwareProcessed = 0;
+            _bloatwareSucceeded = 0;
+            _bloatwareFailed = 0;
+            _bloatwareLoopFinished = false;
+            _bloatwareCompleted = false;
+            _bloatwareStopwatch = null;
+
+            foreach (var app in _allBloatwareApps)
+                app.RemovalState = BloatwareRemovalState.None;
+
+            if (BloatwareProgressCard != null)
+                BloatwareProgressCard.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetBloatwareControlsEnabled(bool enabled)
+        {
+            if (BloatwareList != null) BloatwareList.IsHitTestVisible = enabled;
+            if (FilterInstalledOnlyCheck != null) FilterInstalledOnlyCheck.IsEnabled = enabled;
+            if (BloatwareQuickSelectPanel != null) BloatwareQuickSelectPanel.IsEnabled = enabled;
+        }
+
+        private void StartBloatwareProgress(List<BloatwareItem> selectedApps, bool cleanResiduals)
+        {
+            _bloatwareTotal = selectedApps.Count;
+            _bloatwareProcessed = 0;
+            _bloatwareSucceeded = 0;
+            _bloatwareFailed = 0;
+            _bloatwareLoopFinished = false;
+            _bloatwareCompleted = false;
+            _bloatwareCleanResiduals = cleanResiduals;
+            _bloatwareStopwatch = Stopwatch.StartNew();
+
+            _bloatwareProgressTimer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _bloatwareProgressTimer.Tick -= BloatwareProgressTimer_Tick;
+            _bloatwareProgressTimer.Tick += BloatwareProgressTimer_Tick;
+            _bloatwareProgressTimer.Start();
+
+            foreach (var app in selectedApps)
+                app.RemovalState = BloatwareRemovalState.Queued;
+
+            if (BloatwareProgressCard == null) return;
+
+            BloatwareProgressCard.Visibility = Visibility.Visible;
+            BloatwareProgressCard.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3B82F6"));
+            if (BloatwareLiveBadge != null) BloatwareLiveBadge.Visibility = Visibility.Visible;
+            if (BloatwareCurrentSpinner != null)
+            {
+                BloatwareCurrentSpinner.IsIndeterminate = true;
+                BloatwareCurrentSpinner.Visibility = Visibility.Visible;
+            }
+
+            BloatwareProgressTitle.Text = "Kaldırma işlemi sürüyor";
+            BloatwareCurrentText.Text = "Şu an: sıradaki uygulama hazırlanıyor…";
+            BloatwareProgressStage.Text = cleanResiduals
+                ? "Paket ve artıklar temizleniyor…"
+                : "Paket kaldırılıyor…";
+            BloatwareProgressBar.Value = 0;
+            BloatwareProgressCount.Text = $"Tamamlanan: 0 / {_bloatwareTotal}";
+            BloatwareProgressPercent.Text = "%0";
+            RefreshBloatwareProgressDetail();
+        }
+
+        private void UpdateBloatwareProgress(BloatwareItem app)
+        {
+            if (BloatwareProgressCard == null) return;
+
+            int percent = GetBloatwarePercent();
+            BloatwareProgressTitle.Text = "Kaldırma işlemi sürüyor";
+            BloatwareCurrentText.Text = $"Şu an: {app.DisplayName} kaldırılıyor…";
+            BloatwareProgressStage.Text = _bloatwareCleanResiduals
+                ? "Paket ve artıklar temizleniyor…"
+                : "Paket kaldırılıyor…";
+            BloatwareProgressCount.Text = $"Tamamlanan: {_bloatwareProcessed} / {_bloatwareTotal}";
+            BloatwareProgressPercent.Text = $"%{percent}";
+            BloatwareProgressBar.Value = percent;
+            RefreshBloatwareProgressDetail();
+        }
+
+        private void UpdateBloatwareProgressAfterItem(BloatwareItem app, bool removed)
+        {
+            _bloatwareProcessed++;
+            // Başarı sayacı ancak nihai tarama sonrası artırılır; böylece kartta da
+            // doğrulanmamış bir yeşil başarı gösterilmez.
+            if (!removed) _bloatwareFailed++;
+
+            if (BloatwareProgressCard == null) return;
+
+            int percent = GetBloatwarePercent();
+            BloatwareCurrentText.Text = removed
+                ? $"Doğrulanıyor: {app.DisplayName}"
+                : $"Kaldırılamadı: {app.DisplayName}";
+            BloatwareProgressStage.Text = removed
+                ? "Kaldırma denemesi tamamlandı; nihai doğrulama bekleniyor…"
+                : "Paket kaldırılamadı; ayrıntılar günlükte. Sıradaki uygulamaya geçiliyor…";
+            BloatwareProgressCount.Text = $"Tamamlanan: {_bloatwareProcessed} / {_bloatwareTotal}";
+            BloatwareProgressPercent.Text = $"%{percent}";
+            BloatwareProgressBar.Value = percent;
+            RefreshBloatwareProgressDetail();
+        }
+
+        private int GetBloatwarePercent()
+        {
+            return _bloatwareTotal <= 0
+                ? 0
+                : (int)Math.Round((_bloatwareProcessed / (double)_bloatwareTotal) * 100.0);
+        }
+
+        private void RefreshBloatwareProgressDetail()
+        {
+            if (BloatwareRemainingText == null) return;
+
+            int remaining = Math.Max(0, _bloatwareTotal - _bloatwareProcessed);
+            BloatwareRemainingText.Text = $"Kalan: {remaining}";
+            BloatwareSuccessText.Text = $"✓ {_bloatwareSucceeded}";
+            BloatwareFailText.Text = $"✗ {_bloatwareFailed}";
+            string elapsed = (_bloatwareStopwatch?.Elapsed ?? TimeSpan.Zero).ToString(@"mm\:ss");
+            BloatwareElapsedText.Text = $"⏱ {elapsed}";
+        }
+
+        private void BloatwareProgressTimer_Tick(object? sender, EventArgs e)
+        {
+            RefreshBloatwareProgressDetail();
+        }
+
+        private void StopBloatwareProgressTimer()
+        {
+            if (_bloatwareProgressTimer != null)
+            {
+                _bloatwareProgressTimer.Stop();
+                _bloatwareProgressTimer.Tick -= BloatwareProgressTimer_Tick;
+            }
+            _bloatwareStopwatch?.Stop();
+        }
+
+        private void FinishBloatwareLoop()
+        {
+            _bloatwareLoopFinished = true;
+            if (_bloatwareProgressTimer != null) _bloatwareProgressTimer.Stop();
+            _bloatwareStopwatch?.Stop();
+
+            if (BloatwareProgressCard == null) return;
+
+            if (BloatwareCurrentSpinner != null)
+            {
+                BloatwareCurrentSpinner.IsIndeterminate = false;
+                BloatwareCurrentSpinner.Visibility = Visibility.Collapsed;
+            }
+            if (BloatwareLiveBadge != null) BloatwareLiveBadge.Visibility = Visibility.Collapsed;
+
+            BloatwareProgressTitle.Text = "Bloatware kaldırma işlemi bitti";
+            BloatwareCurrentText.Text = "Son doğrulama, tüm işlemler bitince yapılacak.";
+            BloatwareProgressStage.Text = "Seçili paketler işlendi; sonuçlar sistem taramasıyla doğrulanacak.";
+            BloatwareProgressCount.Text = $"Tamamlanan: {_bloatwareProcessed} / {_bloatwareTotal}";
+            BloatwareProgressPercent.Text = $"%{GetBloatwarePercent()}";
+            BloatwareProgressBar.Value = GetBloatwarePercent();
+            RefreshBloatwareProgressDetail();
+        }
+
+        private void CompleteBloatwareProgress()
+        {
+            _bloatwareCompleted = true;
+            _bloatwareProcessed = _bloatwareTotal;
+            StopBloatwareProgressTimer();
+
+            if (BloatwareProgressCard == null) return;
+
+            if (BloatwareCurrentSpinner != null)
+            {
+                BloatwareCurrentSpinner.IsIndeterminate = false;
+                BloatwareCurrentSpinner.Visibility = Visibility.Collapsed;
+            }
+            if (BloatwareLiveBadge != null) BloatwareLiveBadge.Visibility = Visibility.Collapsed;
+
+            BloatwareProgressBar.Value = 100;
+            BloatwareProgressPercent.Text = "%100";
+            BloatwareProgressCount.Text = $"Tamamlanan: {_bloatwareTotal} / {_bloatwareTotal}";
+            BloatwareProgressTitle.Text = _bloatwareFailed == 0
+                ? "Kaldırma tamamlandı"
+                : $"{_bloatwareFailed} uygulama kaldırılamadı";
+            BloatwareCurrentText.Text = _bloatwareFailed == 0
+                ? "Tüm seçili paketler kaldırıldı."
+                : "Kaldırılamayan paketler listede kırmızı rozetle işaretlendi.";
+            BloatwareProgressStage.Text = _bloatwareFailed == 0
+                ? "Son tarama başarılı; sistemde seçili paket kalmadı."
+                : "Son tarama tamamlandı; bazı paketler hâlâ sistemde görünüyor.";
+            BloatwareProgressCard.BorderBrush = new SolidColorBrush(
+                (Color)ColorConverter.ConvertFromString(_bloatwareFailed == 0 ? "#10B981" : "#F59E0B"));
+            RefreshBloatwareProgressDetail();
+        }
+        #endregion
+
         #region Hızlı Seçim Butonları
         private void SelectAllApps_Click(object sender, RoutedEventArgs e)
         {
+            if (_isApplyingBulkChanges) return;
             foreach (var app in _displayedBloatware)
             {
                 if (app.IsInstalled)
@@ -2350,6 +2594,7 @@ namespace PureWin
 
         private void SelectSafeApps_Click(object sender, RoutedEventArgs e)
         {
+            if (_isApplyingBulkChanges) return;
             foreach (var app in _displayedBloatware)
             {
                 if (app.IsInstalled && app.IsSafe)
@@ -2362,6 +2607,7 @@ namespace PureWin
 
         private void ClearAppSelection_Click(object sender, RoutedEventArgs e)
         {
+            if (_isApplyingBulkChanges) return;
             foreach (var app in _allBloatwareApps)
                 app.IsSelected = false;
             UpdateActionBar();
@@ -2411,6 +2657,7 @@ namespace PureWin
         {
             if (_isApplying) return;
             _isApplying = true;
+            _isApplyingBulkChanges = true;
 
             try
             {
@@ -2422,6 +2669,11 @@ namespace PureWin
 
                 if (total == 0)
                     return;
+
+                // Önceki çalıştırmadan kalan rozetleri temizle ve işlem boyunca
+                // Bloatware seçim/filtre kontrollerini kilitle.
+                ResetBloatwareProgressState();
+                SetBloatwareControlsEnabled(false);
 
                 // Kullanıcıya Geri Yükleme Noktası oluşturmak isteyip istemediğini sor
                 string choice = await ShowModernChoiceDialogAsync(
@@ -2665,6 +2917,18 @@ namespace PureWin
                                     {
                                         SystemSettingsService.SetMenuShowDelay(reduce: true);
                                     }
+                                    else if (tweak.Id == "DisableStoreSearchSuggestions")
+                                    {
+                                        // Resmi IsStoreSuggestionsEnabled ayarını uygula. Ayarın
+                                        // bulunmadığı eski Windows sürümlerinde store.db yedeği kullanılır.
+                                        // Başarısızsa toggle'ı geri al.
+                                        if (importOk && !StoreSearchSuggestionService.Disable())
+                                        {
+                                            StoreSearchSuggestionService.Enable();
+                                            TweakSnapshotService.RestoreSnapshot(tweak.Id);
+                                            importOk = false;
+                                        }
+                                    }
                                     else if (tweak.Id == "DisableWidgets")
                                     {
                                         try
@@ -2696,6 +2960,11 @@ namespace PureWin
                                     {
                                         SystemSettingsService.SetMenuShowDelay(reduce: false);
                                     }
+                                    else if (tweak.Id == "DisableStoreSearchSuggestions")
+                                    {
+                                        if (!StoreSearchSuggestionService.Enable())
+                                            importOk = false;
+                                    }
                                 }
                             });
 
@@ -2720,6 +2989,9 @@ namespace PureWin
                 }
 
                 // 3. Seçilen Bloatware Paketlerini Kaldır
+                if (selectedApps.Count > 0)
+                    StartBloatwareProgress(selectedApps, cleanResiduals);
+
                 foreach (var app in selectedApps)
                 {
                     currentStep++;
@@ -2729,12 +3001,21 @@ namespace PureWin
                         ? $"Kaldırılıyor ve artıklar temizleniyor: {app.DisplayName}..."
                         : $"Paket kaldırılıyor: {app.DisplayName}...";
                     ApplyBtn.Content = $"İşleniyor ({currentStep}/{totalSteps})...";
+
+                    app.RemovalState = BloatwareRemovalState.Removing;
+                    UpdateBloatwareProgress(app);
                     await Task.Delay(20);
 
                     bool removed = await AppxService.RemoveAppxPackageAsync(app.AppId, app.RemovalMethod, app.DisplayName, cleanResiduals);
+                    // Kaldırma servisi başarılı dönse bile nihai tarama yapılmadan yeşil rozet gösterme.
+                    app.RemovalState = removed ? BloatwareRemovalState.Verifying : BloatwareRemovalState.Failed;
                     app.IsInstalled = !removed;
                     app.IsSelected = false;
+                    UpdateBloatwareProgressAfterItem(app, removed);
                 }
+
+                if (selectedApps.Count > 0)
+                    FinishBloatwareLoop();
 
                 // 4. Seçilen Windows Servislerini Kapat
                 foreach (var service in stagedServices)
@@ -2842,6 +3123,23 @@ namespace PureWin
                 {
                     app.IsInstalled = AppxService.IsAppInstalled(app, installedPackages);
                     app.IsSelected = false;
+                }
+
+                // Nihai durum her zaman son taramaya göre belirlenir.
+                // Böylece servis "kaldırıldı" dese bile paket hâlâ kuruluysa yeşil rozet gösterilmez.
+                if (selectedApps.Count > 0)
+                {
+                    foreach (var app in selectedApps)
+                    {
+                        app.RemovalState = app.IsInstalled
+                            ? BloatwareRemovalState.Failed
+                            : BloatwareRemovalState.Removed;
+                    }
+
+                    _bloatwareSucceeded = selectedApps.Count(a => !a.IsInstalled);
+                    _bloatwareFailed = selectedApps.Count(a => a.IsInstalled);
+                    _bloatwareProcessed = selectedApps.Count;
+                    CompleteBloatwareProgress();
                 }
 
                 ApplyBloatwareFilter();
@@ -2956,6 +3254,42 @@ namespace PureWin
             finally
             {
                 _isApplying = false;
+                _isApplyingBulkChanges = false;
+                StopBloatwareProgressTimer();
+                SetBloatwareControlsEnabled(true);
+
+                // İşlem yarıda kaldıysa "Kaldırılıyor..." veya "Sırada" rozetlerini kalıcı bırakma.
+                foreach (var app in _allBloatwareApps)
+                {
+                    if (app.RemovalState == BloatwareRemovalState.Removing)
+                        app.RemovalState = BloatwareRemovalState.Failed;
+                    else if (app.RemovalState == BloatwareRemovalState.Verifying)
+                        app.RemovalState = BloatwareRemovalState.Unverified;
+                    else if (app.RemovalState == BloatwareRemovalState.Queued)
+                        app.RemovalState = BloatwareRemovalState.None;
+                }
+
+                if (BloatwareProgressCard != null && BloatwareProgressCard.Visibility == Visibility.Visible && !_bloatwareCompleted)
+                {
+                    if (BloatwareCurrentSpinner != null)
+                    {
+                        BloatwareCurrentSpinner.IsIndeterminate = false;
+                        BloatwareCurrentSpinner.Visibility = Visibility.Collapsed;
+                    }
+                    if (BloatwareLiveBadge != null) BloatwareLiveBadge.Visibility = Visibility.Collapsed;
+
+                    BloatwareProgressTitle.Text = _bloatwareLoopFinished
+                        ? "Bloatware kaldırıldı, doğrulama tamamlanamadı"
+                        : "Kaldırma işlemi tamamlanamadı";
+                    BloatwareCurrentText.Text = _bloatwareLoopFinished
+                        ? "Son sistem taraması yapılamadı; satır durumları geçici sonuçları gösteriyor."
+                        : "İşlem beklenmedik şekilde durdu. Ayrıntılar hata penceresinde.";
+                    BloatwareProgressStage.Text = "Kaldırılamayan veya durumu belirsiz paketler listede işaretlendi.";
+                    BloatwareProgressCard.BorderBrush = new SolidColorBrush(
+                        (Color)ColorConverter.ConvertFromString(_bloatwareLoopFinished ? "#F59E0B" : "#EF4444"));
+                    RefreshBloatwareProgressDetail();
+                }
+
                 UpdateActionBar();
             }
         }
@@ -3890,6 +4224,7 @@ namespace PureWin
                 SoftwareLoadingState.Visibility = Visibility.Visible;
 
                 StatPendingUpdatesText.Text = "Taranıyor...";
+                StatPendingUpdatesSubText.Text = "Güncelleme Durumu";
                 StatLastScanText.Text = "Taranıyor...";
 
                 if (!SoftwareUpdateService.IsWingetAvailable())
@@ -3964,6 +4299,7 @@ namespace PureWin
             int pending = _allSoftwareUpdates.Count(u => u.IsReady || u.IsUpdating);
 
             StatPendingUpdatesText.Text = pending > 0 ? $"{pending} Uygulama" : "Hepsi Güncel";
+            StatPendingUpdatesSubText.Text = pending > 0 ? "Güncelleme Bekliyor" : "Güncelleme Yok";
             StatLastScanText.Text = DateTime.Now.ToString("HH:mm");
 
             if (pending > 0)
@@ -4386,7 +4722,7 @@ namespace PureWin
         {
             string exePath = Environment.ProcessPath ?? string.Empty;
 
-            string version = "1.1.0";
+            string version = "1.1.1";
             string buildInfo = string.Empty;
             try
             {

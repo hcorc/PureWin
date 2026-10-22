@@ -17,8 +17,10 @@ namespace PureWin.Services
     public static class ResidualCleanerService
     {
         /// <summary>
-        /// Güvenlik Kalkanı: HKLM (sistem geneli) kayıt defteri silme koruması.
-        /// PureWin mimarisinde sistem kararlılığını garanti etmek için HKLM silmeleri KESİNLİKLE KAPALIDIR (false).
+        /// Güvenlik Kalkanı: Genel HKLM vendor/COM/StateRepository silme koruması.
+        /// PureWin mimarisinde sistem kararlılığını garanti etmek için genel HKLM silmeleri KAPALIDIR.
+        /// Yalnızca uygulamaya özel, güvenli CapabilityAccessManager izin kayıtları
+        /// CleanHklmCapabilityTraces tarafından ayrıca temizlenir.
         /// </summary>
         public static bool EnableHklmDeletion => false;
 
@@ -640,6 +642,9 @@ namespace PureWin.Services
                 // 4. Kayıt Defteri (.reg Yedeği Al ve Temizle)
                 CleanRegistryResiduals(appId, tokens, displayName, backupRegistry, allowHklm, result);
 
+                // 5. UWP/Appx uygulamalarının kullanıcı ve izin kayıtları
+                CleanUwpRegistryTraces(appId, tokens, result);
+
                 Debug.WriteLine($"[ResidualCleaner] Bitti: {appId}. Silinen Klasör: {result.DeletedFoldersCount}, Dosya: {result.DeletedFilesCount}, Reg Anahtarı: {result.DeletedRegistryKeysCount}, Değer: {result.DeletedRegistryValuesCount}, Yedek: {result.CreatedBackups.Count}");
                 return result;
             });
@@ -817,7 +822,10 @@ namespace PureWin.Services
             }
             catch { }
 
-            // 3. HKCU Uninstall Kayıtları
+            // 3. HKCU politikaları (WindowsPhotos gibi uygulamaya özel politika anahtarları)
+            CleanVendorKeys(Registry.CurrentUser, @"Software\Policies\Microsoft", "HKEY_CURRENT_USER", tokens, backupRegistry, result);
+
+            // 4. HKCU Uninstall Kayıtları
             CleanUninstallKeysInternal(Registry.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Uninstall", "HKEY_CURRENT_USER", tokens, displayName, backupRegistry, result);
 
             // 4. HKCU Startup (Run) Girdileri
@@ -836,9 +844,132 @@ namespace PureWin.Services
             }
         }
 
+        /// <summary>
+        /// UWP/Appx uygulamalarının kaldırma sonrası kullanıcıya ait izlerini temizler.
+        /// Sistem veritabanı (StateRepository), COM kayıtları ve AppxAllUserStore gibi
+        /// Windows tarafından yönetilen alanlara dokunmaz.
+        /// </summary>
+        private static void CleanUwpRegistryTraces(string appId, HashSet<string> tokens, ResidualCleanResult result)
+        {
+            string[] hkcuPaths =
+            {
+                @"Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications",
+                @"Software\Microsoft\Windows\CurrentVersion\Start\TileProperties",
+                @"Software\Microsoft\Phone\ShellUI\WindowSizing",
+                @"Software\Microsoft\Windows NT\CurrentVersion\HostActivityManager\CommitHistory",
+                @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\PolicyCache",
+                @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage",
+                @"Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations"
+            };
+
+            foreach (string path in hkcuPaths)
+            {
+                try
+                {
+                    using var parent = Registry.CurrentUser.OpenSubKey(path, writable: true);
+                    if (parent == null) continue;
+
+                    bool allowTokenFallback = path.EndsWith(@"\UrlAssociations", StringComparison.OrdinalIgnoreCase);
+
+                    foreach (string name in parent.GetSubKeyNames().ToArray())
+                    {
+                        if (!IsPackageTraceName(name, appId, tokens, allowTokenFallback))
+                            continue;
+
+                        string fullPath = $@"HKEY_CURRENT_USER\{path}\{name}";
+                        string? backup = BackupRegistryKey(fullPath);
+                        if (backup != null)
+                            result.CreatedBackups.Add(backup);
+
+                        try
+                        {
+                            parent.DeleteSubKeyTree(name, false);
+                            result.DeletedRegistryKeysCount++;
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
+
+            CleanHklmCapabilityTraces(appId, tokens, result);
+        }
+
+        /// <summary>
+        /// HKLM'de yalnızca uygulamaya özel CapabilityAccessManager izin kayıtlarını temizler.
+        /// Genel HKLM/COM/StateRepository silme politikası hâlâ kapalıdır.
+        /// </summary>
+        private static void CleanHklmCapabilityTraces(string appId, HashSet<string> tokens, ResidualCleanResult result)
+        {
+            const string basePath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\Capabilities";
+
+            try
+            {
+                using var capabilities = Registry.LocalMachine.OpenSubKey(basePath, false);
+                if (capabilities == null) return;
+
+                foreach (string capability in capabilities.GetSubKeyNames())
+                {
+                    using var apps = capabilities.OpenSubKey(capability + @"\Apps", writable: true);
+                    if (apps == null) continue;
+
+                    foreach (string appName in apps.GetSubKeyNames().ToArray())
+                    {
+                        if (!IsPackageTraceName(appName, appId, tokens, allowTokenFallback: false))
+                            continue;
+
+                        string fullPath = $@"HKEY_LOCAL_MACHINE\{basePath}\{capability}\Apps\{appName}";
+                        string? backup = BackupRegistryKey(fullPath);
+                        if (backup != null)
+                            result.CreatedBackups.Add(backup);
+
+                        try
+                        {
+                            apps.DeleteSubKeyTree(appName, false);
+                            result.DeletedRegistryKeysCount++;
+                        }
+                        catch { }
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private static bool IsPackageTraceName(
+            string name,
+            string appId,
+            HashSet<string> tokens,
+            bool allowTokenFallback)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            if (name.Contains(appId, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (!allowTokenFallback)
+                return false;
+
+            // Üçüncü parti üreticilerin benzer adlı kayıtlarını koru.
+            if (ThirdPartyVendorPrefixes.Any(v => name.StartsWith(v, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            foreach (string token in tokens)
+            {
+                if (token.Length < 6 || BlacklistedTokens.Contains(token))
+                    continue;
+
+                if (name.Contains(token, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
+        }
+
         private static void CleanVendorKeys(RegistryKey root, string basePath, string rootName, HashSet<string> tokens, bool backupRegistry, ResidualCleanResult result)
         {
-            // HKLM anahtar silme güvenlik nedeniyle KESİNLİKLE YASAKTIR
+            // Genel HKLM vendor anahtarı silme güvenlik nedeniyle yasaktır.
             if (rootName.StartsWith("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase))
             {
                 Debug.WriteLine($"[ResidualCleaner] HKLM Vendor silme engellendi: {rootName}\\{basePath}");
